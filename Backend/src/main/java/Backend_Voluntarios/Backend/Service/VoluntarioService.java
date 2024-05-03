@@ -33,23 +33,7 @@ public class VoluntarioService {
     public List<?> tablaId(Long idVoluntario) {
         return repositoryVoluntario.buscarIdVoluntario(idVoluntario);
     }
-    @Transactional
-    public void nuevoVoluntario(VoluntarioEntity voluntarioEntity) {
-        String zonaWKT = convertirPointAWKT(voluntarioEntity.getZonaViviendaVoluntario());
 
-        // Llamar al método del repositorio para crear un nuevo voluntario
-        repositoryVoluntario.crearVoluntario(
-                voluntarioEntity.getNombreVoluntario(),
-                voluntarioEntity.getCorreoVoluntario(),
-                voluntarioEntity.getNumeroDocumentoVoluntario(),
-                zonaWKT, // Pasar WKT en lugar de Point
-                voluntarioEntity.getContrasenaVoluntario(),
-                voluntarioEntity.getEquipamientoVoluntario()
-        );
-    }
-    private String convertirPointAWKT(Point point) {
-        return String.format("POINT(%f %f)", point.getX(), point.getY());
-    }
     public VoluntarioEntity borrarVoluntario(VoluntarioEntity voluntarioEntity) {
         return repositoryVoluntario.borrarVoluntario(voluntarioEntity.getIdVoluntario());
     }

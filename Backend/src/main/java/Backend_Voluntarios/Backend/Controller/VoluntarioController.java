@@ -73,12 +73,7 @@ public class VoluntarioController {
         String text = bytesToString((byte[]) voluntario[6]);
         assert text != null;
 
-        byte[] wkbBytes = hexStringToByteArray(text);
         double[] latLong = wkbToLatLong(hexStringToByteArray(text));
-
-        // Deserializa el array de bytes a coordenadas x e y
-        double x = ByteBuffer.wrap(wkbBytes, 5, 8).order(ByteOrder.LITTLE_ENDIAN).getDouble();
-        double y = ByteBuffer.wrap(wkbBytes, 13, 8).order(ByteOrder.LITTLE_ENDIAN).getDouble();
 
         // Imprime las coordenadas x e y
         return("Latitud: " + latLong[1] + ", Longitud: " + latLong[0]);

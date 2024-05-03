@@ -1,13 +1,6 @@
 package Backend_Voluntarios.Backend.Entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import org.springframework.data.geo.Point;
 
 import java.util.HashSet;
@@ -21,7 +14,7 @@ public class EmergenciaEntity {
     private Long idEmergencia;
 
     private String tipoEmergencia;
-
+    @Column(name = "zona_emergencia", columnDefinition = "geometry(Point, 4326)")
     private Point zonaEmergencia;
     private String condicionFisica;
     private String cantidadVoluntariosMinimo;

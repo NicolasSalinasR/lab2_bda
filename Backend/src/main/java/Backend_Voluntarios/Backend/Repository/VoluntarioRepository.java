@@ -13,6 +13,7 @@ import java.util.List;
 
 @Repository
 public interface VoluntarioRepository extends JpaRepository<VoluntarioEntity, Long> {
+
         @Query("SELECT palabra FROM VoluntarioEntity palabra WHERE"
                         + " CONCAT(palabra.idVoluntario, palabra.nombreVoluntario, palabra.correoVoluntario, " +
                         "palabra.numeroDocumentoVoluntario, palabra.equipamientoVoluntario, " +
@@ -26,20 +27,6 @@ public interface VoluntarioRepository extends JpaRepository<VoluntarioEntity, Lo
         @Query(value = "SELECT * FROM voluntario WHERE voluntario.id_voluntario = ?1", nativeQuery = true)
         public List<?> buscarIdVoluntario(@Param("v") Long idVoluntario);
 
-        @Transactional
-        @Modifying
-        @Query(value = "INSERT INTO voluntario (nombre_voluntario, correo_voluntario, " +
-                "numero_documento_voluntario, zona_vivienda_voluntario, contrasena_voluntario, " +
-                "equipamiento_voluntario) " +
-                "VALUES (:nombre, :correo, :numero, ST_GeomFromText(:zona), :contrasena, :equipamiento)",
-                nativeQuery = true)
-        void crearVoluntario(
-                @Param("nombre") String nombreVoluntario,
-                @Param("correo") String correoVoluntario,
-                @Param("numero") String numeroDocumentoVoluntario,
-                @Param("zona") String zonaViviendaVoluntarioWKT, // WKT en lugar de Point
-                @Param("contrasena") String contrasenaVoluntario,
-                @Param("equipamiento") String equipamientoVoluntario);
         @Query("DELETE FROM VoluntarioEntity WHERE idVoluntario = :id")
         VoluntarioEntity borrarVoluntario(@Param("id") Long idVoluntario);
 
