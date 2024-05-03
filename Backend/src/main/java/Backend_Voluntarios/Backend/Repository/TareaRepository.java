@@ -14,12 +14,13 @@ import java.util.List;
 public interface TareaRepository extends JpaRepository<TareaEntity, Long> {
 
         // Encontrar tareas por Id
-        @Query("SELECT t FROM TareaEntity t WHERE t.idTarea = :id")
-        TareaEntity findTareaById(@Param("id") Long id);
+        @Query(value = "SELECT * FROM tarea  WHERE tarea.idTarea = ?1", nativeQuery = true)
+      public  List<?> findTareaById(@Param("id") Long id);
 
         // Encontrar todas las tareas
-        @Query("SELECT t FROM TareaEntity t")
-        List<TareaEntity> findAllTareas();
+        @Query(value = "SELECT * FROM tarea", nativeQuery = true)
+      public  List<?> findAllTareas();
+
 
         @Query("SELECT v FROM TareaEntity v WHERE v.emergencia.idEmergencia = :id")
         public List<TareaEntity> buscarIdTarea(@Param("id") Long id);

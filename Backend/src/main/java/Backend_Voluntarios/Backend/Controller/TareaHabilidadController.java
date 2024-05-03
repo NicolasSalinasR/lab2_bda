@@ -5,14 +5,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import Backend_Voluntarios.Backend.Entity.EmeHabilidadEntity;
-import Backend_Voluntarios.Backend.Entity.HabilidadEntity;
-import Backend_Voluntarios.Backend.Entity.TareaEntity;
-import Backend_Voluntarios.Backend.Service.AuditoriaService;
-import Backend_Voluntarios.Backend.Service.EmeHabilidadService;
-import Backend_Voluntarios.Backend.Service.HabilidadService;
-import Backend_Voluntarios.Backend.Service.TareaService;
+import Backend_Voluntarios.Backend.Entity.*;
+import Backend_Voluntarios.Backend.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.geo.Point;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,8 +16,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import Backend_Voluntarios.Backend.Service.TareaHabilidadService;
-import Backend_Voluntarios.Backend.Entity.TareaHabilidadEntity;
+
+import static Backend_Voluntarios.Backend.Controller.VoluntarioController.bytesToString;
+import static Backend_Voluntarios.Backend.Controller.VoluntarioController.wkbToLatLong;
+import static ch.qos.logback.core.encoder.ByteArrayUtil.hexStringToByteArray;
 
 @RestController
 @RequestMapping("/tareaHabilidad")
@@ -36,6 +34,9 @@ public class TareaHabilidadController {
 
     @Autowired
     private AuditoriaService auditoriaService;
+
+    @Autowired
+    private EmergenciaService emergenciaservice;
 
     @GetMapping("/{id}")
     public TareaHabilidadEntity getTareaHabilidadById(@PathVariable Long id) {
@@ -56,8 +57,27 @@ public class TareaHabilidadController {
         
         String habilidadRequerida = body.get("habilidadRequerida");
 
+        List<?> tareas = tareaService.getTareaById(idTarea);
+        Object[] tareasDos = (Object[]) tareas.get(0);
+        Long id = ((Long) tareasDos[0]);
+        String nombre = ((String) tareasDos[1]);
+        String descripcion = ((String) tareasDos[2]);
+        String tipo = ((String) tareasDos[3]);
+        String zona = bytesToString((byte[]) tareasDos[4]);
 
-        TareaEntity tareaNew = tareaService.getTareaById(idTarea);
+        double[] latLong = wkbToLatLong(hexStringToByteArray(zona));
+        double latitudVoluntario = latLong[1];
+        double longiotudVoluntario = latLong[0];
+
+         Point zonaTarea = new Point(longiotudVoluntario, latitudVoluntario);
+
+
+        Long idEmergencia = ((Long) tareasDos[5]);
+
+        EmergenciaEntity emergencia = emergenciaservice.getEmergenciaById(idEmergencia);
+        TareaEntity tareaNew = new TareaEntity(id,nombre,descripcion,tipo,emergencia, zonaTarea);
+
+
         EmeHabilidadEntity emeHabilidadNew = emeHabilidadService.getEmeHabilidadById(idEmeHabilidad);
 
         TareaHabilidadEntity tareaHabilidad = new TareaHabilidadEntity(tareaNew, emeHabilidadNew, habilidadRequerida);

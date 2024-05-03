@@ -143,7 +143,7 @@ public class VoluntarioController {
         return distancia;
     }
 
-    private static String bytesToString(byte[] bytes) {
+    static String bytesToString(byte[] bytes) {
         try {
             return new String(bytes, "UTF-8"); // Convertir los bytes a una cadena usando el charset especificado
         } catch (UnsupportedEncodingException e) {
@@ -152,7 +152,7 @@ public class VoluntarioController {
         }
     }
 
-    private static double[] wkbToLatLong(byte[] wkbBytes) {
+    static double[] wkbToLatLong(byte[] wkbBytes) {
         ByteBuffer buffer = ByteBuffer.wrap(wkbBytes);
         buffer.order(ByteOrder.LITTLE_ENDIAN); // Orden de bytes para interpretar como números de punto flotante
         buffer.position(9); // Saltar los primeros nueve bytes (tipo de geometría y orden de bytes)
