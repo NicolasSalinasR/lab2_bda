@@ -5,6 +5,7 @@ import Backend_Voluntarios.Backend.Entity.RankingEntity;
 import Backend_Voluntarios.Backend.Entity.TareaEntity;
 import Backend_Voluntarios.Backend.Entity.VoluntarioEntity;
 
+import org.springframework.data.geo.Point;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -52,14 +53,16 @@ public interface RankingRepository extends JpaRepository<RankingEntity, Long> {
         @Query("SELECT v FROM RankingEntity v WHERE v.idRanking = ?1")
         RankingEntity idRanking(@Param("v") Long idRanking);
 
+        //Cambiar
         @Query("SELECT v.zonaEmergencia FROM EmergenciaEntity v WHERE v.zonaEmergencia =:zona")
-        public List<String> matchZona(String zona);
+        public List<String> matchZona(Point zona);
 
         @Query("SELECT v.habilidadRequerida FROM TareaHabilidadEntity v WHERE v.habilidadRequerida LIKE CONCAT('%', :equipo, '%')")
         public List<String> matchEquipo(@Param("equipo") String equipo);
 
         @Query("SELECT COUNT(v) FROM VoluntarioHabilidadEntity v WHERE v.voluntario.idVoluntario=:id")
         public int matchHabilidad(@Param("id") Long id);
+
 
         @Query("SELECT e.idEmergencia, v.numeroDocumentoVoluntario, v.nombreVoluntario, " +
                         "COUNT(DISTINCT t.idTarea) AS cantidad_tareas " +

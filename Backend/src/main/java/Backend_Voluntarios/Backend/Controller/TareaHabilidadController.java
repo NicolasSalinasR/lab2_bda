@@ -62,7 +62,7 @@ public class TareaHabilidadController {
 
         TareaHabilidadEntity tareaHabilidad = new TareaHabilidadEntity(tareaNew, emeHabilidadNew, habilidadRequerida);
         Long idUsuario = 1L;
-        auditoriaService.registrarCambio(idUsuario, "Add", "añadio una tarea Habilidad");
+        //auditoriaService.registrarCambio(idUsuario, "Add", "añadio una tarea Habilidad");
         tareaHabilidadService.addTareaHabilidad(tareaHabilidad);
 
         // Long idUsuario = //metodo para obtener id de usuario ya listo, esperar a

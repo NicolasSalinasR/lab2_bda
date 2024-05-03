@@ -14,10 +14,10 @@ public class AuditoriaService {
 
 
 
-    public void registrarCambio(Long idUsuario, String tipoOperacion, String descripcion) {
-        String sql = "INSERT INTO parametros_trigger (id_usuario, tipo_operacion, descripcion) VALUES (?, ?, ?)";
-        jdbcTemplate.update(sql, idUsuario, tipoOperacion, descripcion);
+   // public void registrarCambio(Long idUsuario, String tipoOperacion, String descripcion) {
+     //   String sql = "INSERT INTO parametros_trigger (id_usuario, tipo_operacion, descripcion) VALUES (?, ?, ?)";
+       // jdbcTemplate.update(sql, idUsuario, tipoOperacion, descripcion);
 
-    }
+    //}
 }
 

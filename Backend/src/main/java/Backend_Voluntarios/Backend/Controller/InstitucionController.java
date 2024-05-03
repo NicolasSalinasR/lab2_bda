@@ -53,7 +53,7 @@ public class InstitucionController {
         Long idUsuario = 1L;
         //metodo para obtener id de usuario ya listo, esperar a
         // pablo
-        auditoriaService.registrarCambio(idUsuario, "Add", "añadio una institucion");
+        //auditoriaService.registrarCambio(idUsuario, "Add", "añadio una institucion");
         institucionService.addInstitucion(institucion);
 
 

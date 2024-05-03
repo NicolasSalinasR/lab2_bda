@@ -1,6 +1,7 @@
 package Backend_Voluntarios.Backend.Repository;
 
 import Backend_Voluntarios.Backend.Entity.VoluntarioEntity;
+import org.springframework.data.geo.Point;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -19,26 +20,26 @@ public interface VoluntarioRepository extends JpaRepository<VoluntarioEntity, Lo
                         + " LIKE %?1%")
         public List<VoluntarioEntity> findAll(@Param("palabra") String palabraClave);
 
-        @Query("SELECT v FROM VoluntarioEntity v")
-        public List<VoluntarioEntity> listAll();
+        @Query(value = "SELECT * FROM voluntario ", nativeQuery = true)
+        public List<?> listAll();
 
-        @Query("SELECT v FROM VoluntarioEntity v WHERE v.idVoluntario = ?1")
-        public List<VoluntarioEntity> buscarIdVoluntario(@Param("v") Long idVoluntario);
+        @Query(value = "SELECT * FROM voluntario WHERE voluntario.id_voluntario = ?1", nativeQuery = true)
+        public List<?> buscarIdVoluntario(@Param("v") Long idVoluntario);
 
         @Transactional
         @Modifying
-        @Query(value = "INSERT INTO VoluntarioEntity ( nombreVoluntario, correoVoluntario, " +
-                        "numeroDocumentoVoluntario, zonaViviendaVoluntario, contrasenaVoluntario, " +
-                        "equipamientoVoluntario) " +
-                        "VALUES (:nombre, :correo, :numero, :zona, :contrasena, :equipamiento)")
+        @Query(value = "INSERT INTO voluntario (nombre_voluntario, correo_voluntario, " +
+                "numero_documento_voluntario, zona_vivienda_voluntario, contrasena_voluntario, " +
+                "equipamiento_voluntario) " +
+                "VALUES (:nombre, :correo, :numero, ST_GeomFromText(:zona), :contrasena, :equipamiento)",
+                nativeQuery = true)
         void crearVoluntario(
-                        @Param("nombre") String nombreVoluntario,
-                        @Param("correo") String correoVoluntario,
-                        @Param("numero") String numeroDocumentoVoluntario,
-                        @Param("zona") String zonaViviendaVoluntario,
-                        @Param("contrasena") String contrasenaVoluntario,
-                        @Param("equipamiento") String equipamientoVoluntario);
-
+                @Param("nombre") String nombreVoluntario,
+                @Param("correo") String correoVoluntario,
+                @Param("numero") String numeroDocumentoVoluntario,
+                @Param("zona") String zonaViviendaVoluntarioWKT, // WKT en lugar de Point
+                @Param("contrasena") String contrasenaVoluntario,
+                @Param("equipamiento") String equipamientoVoluntario);
         @Query("DELETE FROM VoluntarioEntity WHERE idVoluntario = :id")
         VoluntarioEntity borrarVoluntario(@Param("id") Long idVoluntario);
 

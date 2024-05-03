@@ -7,6 +7,7 @@ import Backend_Voluntarios.Backend.Service.RankingService;
 import Backend_Voluntarios.Backend.Service.TareaService;
 import Backend_Voluntarios.Backend.Service.VoluntarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.geo.Point;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import Backend_Voluntarios.Backend.Service.AuditoriaService;
@@ -71,7 +72,7 @@ public class RankingController {
             TareaEntity nombreTarea = tareaService.getTareaById(idTarea);
             String tareaRanking = nombreTarea.getNombreTarea();
             VoluntarioEntity buscarVoluntario = voluntarioService.buscarId(idVoluntario);
-            String zona = buscarVoluntario.getZonaViviendaVoluntario();
+            Point zona = buscarVoluntario.getZonaViviendaVoluntario();
             int nivelRanking = rankingService.puntajeRanking(zona, idVoluntario,
                     idTarea);
             String nombreVoluntario = buscarVoluntario.getNombreVoluntario();
@@ -80,7 +81,7 @@ public class RankingController {
                     nombreVoluntario,
                     numeroDocumentoVoluntario, nivelRanking, tareaRanking);
             Long idUsuario = 1L;
-            auditoriaService.registrarCambio(idUsuario, "Add", "añadio un ranking");
+            //auditoriaService.registrarCambio(idUsuario, "Add", "añadio un ranking");
             rankingService.nuevoRanking(ranking);
             // Long idUsuario = metodo para obtener id de usuario ya listo, esperar a pablo
             // auditoriaService.registrarCambio(idUsuario, "Add", "añadio un ranking");
@@ -92,7 +93,7 @@ public class RankingController {
         RankingEntity rankingEntity = rankingService.buscarId(idRanking);
         Long idUsuario = 1L;//metodo para obtener id de usuario ya listo, esperar a
         // pablo
-        auditoriaService.registrarCambio(idUsuario, "Delete", "elimino un ranking");
+        //auditoriaService.registrarCambio(idUsuario, "Delete", "elimino un ranking");
         rankingService.borrarRanking(rankingEntity);
 
 

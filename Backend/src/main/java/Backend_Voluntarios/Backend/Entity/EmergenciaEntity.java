@@ -21,6 +21,7 @@ public class EmergenciaEntity {
     private Long idEmergencia;
 
     private String tipoEmergencia;
+
     private Point zonaEmergencia;
     private String condicionFisica;
     private String cantidadVoluntariosMinimo;
@@ -37,7 +38,7 @@ public class EmergenciaEntity {
     private InstitucionEntity institucion;
 
     // Constructor all
-    public EmergenciaEntity(String tipoEmergencia, String zonaEmergencia, String condicionFisica,
+    public EmergenciaEntity(String tipoEmergencia, Point zonaEmergencia, String condicionFisica,
             String cantidadVoluntariosMinimo, String cantidadVoluntariosMaximo, InstitucionEntity institucion) {
         this.tipoEmergencia = tipoEmergencia;
         this.zonaEmergencia = zonaEmergencia;
@@ -65,11 +66,11 @@ public class EmergenciaEntity {
         this.tipoEmergencia = tipoEmergencia;
     }
 
-    public String getZonaEmergencia() {
+    public Point getZonaEmergencia() {
         return zonaEmergencia;
     }
 
-    public void setZonaEmergencia(String zonaEmergencia) {
+    public void setZonaEmergencia(Point zonaEmergencia) {
         this.zonaEmergencia = zonaEmergencia;
     }
 

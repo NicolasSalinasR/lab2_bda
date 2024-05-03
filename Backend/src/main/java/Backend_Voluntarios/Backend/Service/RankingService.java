@@ -5,6 +5,7 @@ import Backend_Voluntarios.Backend.Entity.VoluntarioEntity;
 import Backend_Voluntarios.Backend.Repository.EmergenciaRepository;
 import Backend_Voluntarios.Backend.Repository.RankingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -51,7 +52,7 @@ public class RankingService {
         return repositoryRanking.idRanking(idRanking);
     }
 
-    public int puntajeRanking(String zona, Long idVoluntario, Long idTarea) {
+    public int puntajeRanking(Point zona, Long idVoluntario, Long idTarea) {
         int contador = 0;
         VoluntarioEntity voluntarioEntity = voluntarioService.buscarId(idVoluntario);
         String equipo = voluntarioEntity.getEquipamientoVoluntario();

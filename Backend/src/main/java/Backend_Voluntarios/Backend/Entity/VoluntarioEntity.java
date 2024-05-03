@@ -1,6 +1,7 @@
 package Backend_Voluntarios.Backend.Entity;
 
 import jakarta.persistence.*;
+import org.springframework.data.geo.Point;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -19,17 +20,17 @@ public class VoluntarioEntity {
     @Column(nullable = false, length = 100)
     private String correoVoluntario;
 
-    @Column(unique = true, nullable = false, length = 100)
+    @Column(unique = true)
     private String numeroDocumentoVoluntario;
-
-    @Column(nullable = false)
-    private String zonaViviendaVoluntario;
+    @Column(name = "zona_vivienda_voluntario", columnDefinition = "geometry(Point, 4326)")
+    private Point zonaViviendaVoluntario;
 
     @Column(nullable = false, length = 100)
     private String contrasenaVoluntario;
 
     @Column(nullable = false)
     private String equipamientoVoluntario;
+
 
     @OneToMany(mappedBy = "voluntario")
     private Set<RankingEntity> Ranking = new HashSet<>();
@@ -38,7 +39,7 @@ public class VoluntarioEntity {
     private Set<VoluntarioHabilidadEntity> VoluntarioHabilidad = new HashSet<>();
 
     public VoluntarioEntity(String nombreVoluntario, String correoVoluntario, String numeroDocumentoVoluntario,
-            String equipamientoVoluntario, String zonaViviendaVoluntario, String contrasenaVoluntario) {
+            String equipamientoVoluntario, Point zonaViviendaVoluntario, String contrasenaVoluntario) {
         this.nombreVoluntario = nombreVoluntario;
         this.contrasenaVoluntario = contrasenaVoluntario;
         this.correoVoluntario = correoVoluntario;
@@ -87,11 +88,11 @@ public class VoluntarioEntity {
         this.correoVoluntario = correoVoluntario;
     }
 
-    public String getZonaViviendaVoluntario() {
+    public Point getZonaViviendaVoluntario() {
         return zonaViviendaVoluntario;
     }
 
-    public void setZonaViviendaVoluntario(String zona_vivienda_voluntario) {
+    public void setZonaViviendaVoluntario(Point zona_vivienda_voluntario) {
         this.zonaViviendaVoluntario = zona_vivienda_voluntario;
     }
 
@@ -106,4 +107,5 @@ public class VoluntarioEntity {
     public void setIdVoluntario(Long idVoluntario) {
         this.idVoluntario = idVoluntario;
     }
+
 }

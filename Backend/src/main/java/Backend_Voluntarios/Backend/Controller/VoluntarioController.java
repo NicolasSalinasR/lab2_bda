@@ -11,7 +11,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import Backend_Voluntarios.Backend.Service.AuthService;
 
-import java.util.Collections;
+import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +39,7 @@ public class VoluntarioController {
     }
 
     @GetMapping("/all")
-    public List<VoluntarioEntity> tabla() {
+    public List<?> tabla() {
         return voluntarioService.tablaCompleta();
     }
 
@@ -51,46 +53,87 @@ public class VoluntarioController {
     }
 
     @GetMapping("/{idVoluntario}")
-    public ResponseEntity<List<VoluntarioEntity>> buscarId(@PathVariable Long idVoluntario) {
+    public ResponseEntity<List<?>> buscarId(@PathVariable Long idVoluntario) {
         if (idVoluntario == null) {
             return ResponseEntity.badRequest().build();
         }
-        List<VoluntarioEntity> idVoluntariosEncontrados = voluntarioService.tablaId(idVoluntario);
+        List<?> idVoluntariosEncontrados = voluntarioService.tablaId(idVoluntario);
         if (idVoluntariosEncontrados.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(idVoluntariosEncontrados);
     }
 
+    @GetMapping("/zona")
+    public String zona(@RequestBody Map<String, String> body){
+        Long idVoluntario = Long.parseLong(body.get("idVoluntario"));
+        List<?> idVoluntariosEncontrados = voluntarioService.tablaId(idVoluntario);
+        //VoluntarioEntity voluntario = (VoluntarioEntity) idVoluntariosEncontrados.get(0);
+        Object[] voluntario = (Object[]) idVoluntariosEncontrados.get(0);
+        String text = bytesToString((byte[]) voluntario[6]);
+        assert text != null;
+
+        byte[] wkbBytes = hexStringToByteArray(text);
+        double[] latLong = wkbToLatLong(hexStringToByteArray(text));
+
+        // Deserializa el array de bytes a coordenadas x e y
+        double x = ByteBuffer.wrap(wkbBytes, 5, 8).order(ByteOrder.LITTLE_ENDIAN).getDouble();
+        double y = ByteBuffer.wrap(wkbBytes, 13, 8).order(ByteOrder.LITTLE_ENDIAN).getDouble();
+
+        // Imprime las coordenadas x e y
+        return("Latitud: " + latLong[1] + ", Longitud: " + latLong[0]);
+    }
+
+    private static String bytesToString(byte[] bytes) {
+        try {
+            return new String(bytes, "UTF-8"); // Convertir los bytes a una cadena usando el charset especificado
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private static double[] wkbToLatLong(byte[] wkbBytes) {
+        ByteBuffer buffer = ByteBuffer.wrap(wkbBytes);
+        buffer.order(ByteOrder.LITTLE_ENDIAN); // Orden de bytes para interpretar como números de punto flotante
+        buffer.position(9); // Saltar los primeros nueve bytes (tipo de geometría y orden de bytes)
+        double longitude = buffer.getDouble(); // Coordenada X (longitud)
+        double latitude = buffer.getDouble(); // Coordenada Y (latitud)
+        return new double[] {longitude, latitude};
+    }
+
+    private static byte[] hexStringToByteArray(String hexString) {
+        int len = hexString.length();
+        byte[] data = new byte[len / 2];
+        for (int i = 0; i < len; i += 2) {
+            data[i / 2] = (byte) ((Character.digit(hexString.charAt(i), 16) << 4)
+                    + Character.digit(hexString.charAt(i + 1), 16));
+        }
+        return data;
+    }
+
     @PostMapping("/add")
-    public VoluntarioEntity crearVoluntario(@RequestBody Map<String, String> body) {
+    public void crearVoluntario(@RequestBody Map<String, String> body) {
         String nombreVoluntario = body.get("nombreVoluntario");
         String contrasenaVoluntario = body.get("contrasenaVoluntario");
         String correoVoluntario = body.get("correoVoluntario");
         String numeroDocumentoVoluntario = body.get("numeroDocumentoVoluntario");
         String equipamientoVoluntario = body.get("equipamientoVoluntario");
-        String zonaViviendaVoluntario = body.get("zonaViviendaVoluntario");
+        Double latitud = Double.parseDouble(body.get("latitud"));
+        Double longitud = Double.parseDouble(body.get("longitud"));
 
-        VoluntarioEntity voluntario = new VoluntarioEntity(nombreVoluntario, correoVoluntario,
-                numeroDocumentoVoluntario, equipamientoVoluntario, zonaViviendaVoluntario,
-                passwordEncoder.encode(contrasenaVoluntario));
-        Long idUsuario = 2L;
-        auditoriaService.registrarCambio(idUsuario, "Add", "añadio un voluntario");
-        voluntarioService.nuevoVoluntario(voluntario);
-
-        // Long idUsuario = //metodo para obtener id de usuario ya listo, esperar a
-        // pablo
-        // auditoriaService.registrarCambio(idUsuario, "Add", "añadio un voluntario");
-
-        return voluntario;
+        // Llama al servicio para crear un nuevo voluntario
+        voluntarioService.crearVoluntario(nombreVoluntario, correoVoluntario, numeroDocumentoVoluntario,
+                latitud, longitud, passwordEncoder.encode(contrasenaVoluntario), equipamientoVoluntario);
     }
+
 
     @DeleteMapping("/delete/{idVoluntario}")
     public void eliminar(@PathVariable Long idVoluntario) {
         VoluntarioEntity voluntarioBorrado = voluntarioService.buscarId(idVoluntario);
         Long idUsuario = 2L;//metodo para obtener id de usuario ya listo, esperar a
         // pablo
-        auditoriaService.registrarCambio(idUsuario, "Delete", "elimino unvoluntario");
+        //auditoriaService.registrarCambio(idUsuario, "Delete", "elimino unvoluntario");
         voluntarioService.borrarVoluntario(voluntarioBorrado);
 
 
