@@ -21,6 +21,7 @@ public class EmergenciaService {
         return emergenciaRepository.findEmergenciaById(id);
     }
 
+
     public List<EmergenciaEntity> getAllEmergencias() {
         return emergenciaRepository.findAllEmergencias();
     }

@@ -6,11 +6,13 @@ import Backend_Voluntarios.Backend.Entity.VoluntarioEntity;
 import Backend_Voluntarios.Backend.Service.AuditoriaService;
 import Backend_Voluntarios.Backend.Service.VoluntarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.geo.Point;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import Backend_Voluntarios.Backend.Service.AuthService;
-
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -77,6 +79,68 @@ public class VoluntarioController {
 
         // Imprime las coordenadas x e y
         return("Latitud: " + latLong[1] + ", Longitud: " + latLong[0]);
+    }
+
+    //lista de 20 voluntarios mas cercanos a la emergencia
+    @GetMapping("/voluntariosMasCercanos/{latitud}{longitud}")
+    public void voluntariosMasCercanos(@PathVariable Double latitud, @PathVariable Double longitud){
+        List<?> voluntarios = voluntarioService.tablaCompleta();
+        int largo = voluntarios.size();
+        List <Long> voluntariosCercanos = null;
+        List <Double> voluntariosCercanosDistancia = null;
+        for (int i = 0; i< largo; i++){
+            Object[] voluntario = (Object[]) voluntarios.get(i);
+            String text = bytesToString((byte[]) voluntario[6]);
+            Long id = ((Long) voluntario[0]);
+            assert text != null;
+            double[] latLong = wkbToLatLong(hexStringToByteArray(text));
+            double latitudVoluntario = latLong[1];
+            double longiotudVoluntario = latLong[0];
+            double distancia = distanciaEntrePuntos(latitud, longitud, latitudVoluntario, longiotudVoluntario );
+            if(voluntariosCercanos.size() == 20){
+                double auxiliar = voluntariosCercanosDistancia.get(0);
+                int idAuxiliar = 0;
+                for (int n =1; n<20; n++){
+                    double distanciaEnLista = voluntariosCercanosDistancia.get(n);
+                    if(auxiliar <= distanciaEnLista){
+                        auxiliar = distanciaEnLista;
+                        idAuxiliar = n;
+                    }
+                }
+                if(distancia <= auxiliar){
+                    voluntariosCercanosDistancia.set(idAuxiliar, auxiliar);
+                    voluntariosCercanos.set(idAuxiliar, id);
+                }
+            }
+            else {
+                voluntariosCercanos.add(id);
+                voluntariosCercanosDistancia.add(distancia);
+            }
+        }
+    }
+
+    private static double distanciaEntrePuntos(double latitudPunto1, double longitudPunto1, double latitudPunto2, double longitudPunto2) {
+        // Radio de la Tierra en metros
+        final double radioTierra = 6371000;
+
+        // Convertir las coordenadas de grados a radianes
+        double latitudPunto1Rad = Math.toRadians(latitudPunto1);
+        double longitudPunto1Rad = Math.toRadians(longitudPunto1);
+        double latitudPunto2Rad = Math.toRadians(latitudPunto2);
+        double longitudPunto2Rad = Math.toRadians(longitudPunto2);
+
+        // Calcular la diferencia entre las coordenadas
+        double diferenciaLatitud = latitudPunto2Rad - latitudPunto1Rad;
+        double diferenciaLongitud = longitudPunto2Rad - longitudPunto1Rad;
+
+        // Calcular la distancia utilizando la fórmula del haversine
+        double a = Math.pow(Math.sin(diferenciaLatitud / 2), 2) +
+                Math.cos(latitudPunto1Rad) * Math.cos(latitudPunto2Rad) *
+                        Math.pow(Math.sin(diferenciaLongitud / 2), 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        double distancia = radioTierra * c;
+
+        return distancia;
     }
 
     private static String bytesToString(byte[] bytes) {
