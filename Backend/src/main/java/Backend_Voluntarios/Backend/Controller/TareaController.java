@@ -18,6 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 import Backend_Voluntarios.Backend.Service.TareaService;
 import Backend_Voluntarios.Backend.Entity.TareaEntity;
 
+import static Backend_Voluntarios.Backend.Controller.VoluntarioController.bytesToString;
+import static Backend_Voluntarios.Backend.Controller.VoluntarioController.wkbToLatLong;
+import static ch.qos.logback.core.encoder.ByteArrayUtil.hexStringToByteArray;
+
 @RestController
 @RequestMapping("/tarea")
 @CrossOrigin(origins = "*")
@@ -30,13 +34,28 @@ public class TareaController {
     private AuditoriaService auditoriaService;
 
     @GetMapping("/{id}")
-    public TareaEntity getTareaById(@PathVariable Long id) {
+    public List<?> getTareaById(@PathVariable Long id) {
         return tareaService.getTareaById(id);
     }
 
     @GetMapping("/all")
-    public List<TareaEntity> getAllTareas() {
+    public List<?> getAllTareas() {
         return tareaService.getAllTareas();
+    }
+
+    @GetMapping("/zona")
+    public String zona(@RequestBody Map<String, String> body){
+        Long idVoluntario = Long.parseLong(body.get("idVoluntario"));
+        List<?> idVoluntariosEncontrados = tareaService.getTareaById(idVoluntario);
+        //VoluntarioEntity voluntario = (VoluntarioEntity) idVoluntariosEncontrados.get(0);
+        Object[] voluntario = (Object[]) idVoluntariosEncontrados.get(0);
+        String text = bytesToString((byte[]) voluntario[6]);
+        assert text != null;
+
+        double[] latLong = wkbToLatLong(hexStringToByteArray(text));
+
+        // Imprime las coordenadas x e y
+        return("Latitud: " + latLong[1] + ", Longitud: " + latLong[0]);
     }
 
     @GetMapping("/nombre/{nombreTarea}")

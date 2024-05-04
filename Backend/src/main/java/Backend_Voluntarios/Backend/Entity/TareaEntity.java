@@ -1,6 +1,7 @@
 package Backend_Voluntarios.Backend.Entity;
 
 import jakarta.persistence.*;
+import org.springframework.data.geo.Point;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -17,6 +18,8 @@ public class TareaEntity {
     private String nombreTarea;
     private String descripcionTarea;
     private String tipoTarea;
+    @Column(name = "zona_tarea", columnDefinition = "geometry(Point, 4326)")
+    private Point zonaTarea;
 
     @OneToMany(mappedBy = "tarea")
     private Set<RankingEntity> Ranking = new HashSet<>();
@@ -32,16 +35,27 @@ public class TareaEntity {
     private EmergenciaEntity emergencia;
 
     // Constructor
-    public TareaEntity(String nombreTarea, String descripcionTarea, String tipoTarea) {
+    public TareaEntity(String nombreTarea, String descripcionTarea, String tipoTarea, Point zonaTarea) {
         this.nombreTarea = nombreTarea;
         this.descripcionTarea = descripcionTarea;
         this.tipoTarea = tipoTarea;
+        this.zonaTarea = zonaTarea;
     }
 
-    public TareaEntity(String nombreTarea, String descripcionTarea, String tipoTarea, EmergenciaEntity emergencia) {
+    public TareaEntity(String nombreTarea, String descripcionTarea, String tipoTarea, EmergenciaEntity emergencia, Point zonaTarea) {
         this.nombreTarea = nombreTarea;
         this.descripcionTarea = descripcionTarea;
         this.tipoTarea = tipoTarea;
+        this.zonaTarea =  zonaTarea;
+        this.emergencia = emergencia;
+    }
+
+    public TareaEntity(Long idTarea, String nombreTarea, String descripcionTarea, String tipoTarea, EmergenciaEntity emergencia, Point zonaTarea) {
+        this.idTarea = idTarea;
+        this.nombreTarea = nombreTarea;
+        this.descripcionTarea = descripcionTarea;
+        this.tipoTarea = tipoTarea;
+        this.zonaTarea =  zonaTarea;
         this.emergencia = emergencia;
     }
 

@@ -13,11 +13,11 @@ public class TareaService {
     @Autowired
     private TareaRepository tareaRepository;
 
-    public TareaEntity getTareaById(Long id) {
+    public List<?> getTareaById(Long id) {
         return tareaRepository.findTareaById(id);
     }
 
-    public List<TareaEntity> getAllTareas() {
+    public List<?> getAllTareas() {
         return tareaRepository.findAllTareas();
     }
 

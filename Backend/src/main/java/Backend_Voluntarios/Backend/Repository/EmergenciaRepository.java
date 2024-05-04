@@ -23,6 +23,7 @@ public interface EmergenciaRepository extends JpaRepository<EmergenciaEntity, Lo
     @Query("SELECT e FROM EmergenciaEntity e")
     List<EmergenciaEntity> findAllEmergencias();
 
+
     // save
     @Transactional
     @Modifying
