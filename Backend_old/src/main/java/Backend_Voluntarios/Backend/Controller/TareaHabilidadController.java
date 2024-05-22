@@ -57,8 +57,8 @@ public class TareaHabilidadController {
         
         String habilidadRequerida = body.get("habilidadRequerida");
 
-        List<?> tareas = tareaService.getTareaById(idTarea);
-        Object[] tareasDos = (Object[]) tareas.get(0);
+        TareaEntity tareas = tareaService.getTareaById(idTarea);
+        String tareasDos = tareas.getNombreTarea()
         Long id = ((Long) tareasDos[0]);
         String nombre = ((String) tareasDos[1]);
         String descripcion = ((String) tareasDos[2]);
