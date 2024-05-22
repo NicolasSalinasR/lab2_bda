@@ -8,7 +8,6 @@ import java.util.Set;
 
 @Entity
 @Table(name = "tarea")
-
 public class TareaEntity {
 
     @Id
@@ -42,20 +41,22 @@ public class TareaEntity {
         this.zonaTarea = zonaTarea;
     }
 
-    public TareaEntity(String nombreTarea, String descripcionTarea, String tipoTarea, EmergenciaEntity emergencia, Point zonaTarea) {
+    public TareaEntity(String nombreTarea, String descripcionTarea, String tipoTarea, EmergenciaEntity emergencia,
+            Point zonaTarea) {
         this.nombreTarea = nombreTarea;
         this.descripcionTarea = descripcionTarea;
         this.tipoTarea = tipoTarea;
-        this.zonaTarea =  zonaTarea;
+        this.zonaTarea = zonaTarea;
         this.emergencia = emergencia;
     }
 
-    public TareaEntity(Long idTarea, String nombreTarea, String descripcionTarea, String tipoTarea, EmergenciaEntity emergencia, Point zonaTarea) {
+    public TareaEntity(Long idTarea, String nombreTarea, String descripcionTarea, String tipoTarea,
+            EmergenciaEntity emergencia, Point zonaTarea) {
         this.idTarea = idTarea;
         this.nombreTarea = nombreTarea;
         this.descripcionTarea = descripcionTarea;
         this.tipoTarea = tipoTarea;
-        this.zonaTarea =  zonaTarea;
+        this.zonaTarea = zonaTarea;
         this.emergencia = emergencia;
     }
 
@@ -105,7 +106,7 @@ public class TareaEntity {
         this.emergencia = emergencia;
     }
 
-    public Long getIdEmergencia(){
+    public Long getIdEmergencia() {
         return emergencia.getIdEmergencia();
     }
 }

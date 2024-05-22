@@ -13,8 +13,15 @@ public class TareaService {
     @Autowired
     private TareaRepository tareaRepository;
 
-    public List<?> getTareaById(Long id) {
-        return tareaRepository.findTareaById(id);
+    public TareaEntity getTareaById(Long id) {
+        TareaEntity tarea = new TareaEntity();
+        List<?> tarea2 = tareaRepository.findTareaById(id);
+        tarea.setIdTarea(id);
+        tarea.setNombreTarea((String) tarea2.get(0));
+        tarea.setDescripcionTarea((String) tarea2.get(1));
+        tarea.setTipoTarea((String) tarea2.get(2));
+        System.out.println("Tarea: " + tarea);
+        return tarea;
     }
 
     public List<?> getAllTareas() {
@@ -28,6 +35,7 @@ public class TareaService {
     public List<TareaEntity> getRankingTarea(String nombreTarea) {
         return tareaRepository.listRankingTarea(nombreTarea);
     }
+
     @Transactional
     public void addTarea(TareaEntity tarea) {
         tareaRepository.saveTarea(tarea.getNombreTarea(), tarea.getDescripcionTarea(), tarea.getTipoTarea(),
