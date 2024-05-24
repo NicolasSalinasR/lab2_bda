@@ -7,7 +7,8 @@
 
     <img src="../images/mundo.svg" alt="mundo" class="imgFondo">
     <div class="containerIndex">
-      <img src="../images/RESQ.svg" alt="logo" class="imgLogo">
+      <!-- <img src="../images/RESQ.svg" alt="logo" class="imgLogo"> -->
+      <h1 class="titleRESQ">RES-Q</h1>
       <div class="containerText" @mousemove="updateBlurCiclePosition">
         <div class="containerTextP">
           <p>{{ texto }}</p>
@@ -185,5 +186,13 @@ body {
 .logup:hover {
   background-color: #13678a;
   border: 1px solid #13678a;
+}
+
+.titleRESQ {
+  font-size: 6rem;
+  font-weight: 700;
+  margin: 0;
+  font-weight: 500;
+  letter-spacing: 1px;
 }
 </style>
