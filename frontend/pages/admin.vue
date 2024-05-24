@@ -1,229 +1,228 @@
 <template>
-  <div class="main-conteiner">
-    <div class="background-container">
-      <img src="../images/mundo.svg" alt="mundo">
-      <Navbar @change-component="changeComponent" />
+    <div class="container-admin">
+        <nav class="nav-back">
+            <img src="../images/menu-hamburguesa.svg" alt="" @click="toggleMenu">
+            <h1>RES-Q</h1>
+            <h3>Vista Coordinador</h3>
+        </nav>
 
-      <div id="app">
-        <side-menu></side-menu>
-        <router-view></router-view>
-      </div>
-      <!-- Sección "Voluntario" y botón "Crear Emergencia" -->
-      <div v-if="!mostrarCard && !mostrarListCard2" style="display: flex;">
-        <!-- Columna 1 -->
-        <div style="flex: 1;">
-          <div class="column">
-            <div class="boton">
-              <button class="big-button">Crear Emergencia + </button>
-            </div>
-          </div>
+        <aside>
+            <img src="../images/x.svg" alt="" @click="toggleMenuBack">
+        </aside>
 
-        </div>
+        <section class="aside-section">
 
-        <!-- Columna 2 -->
-        <div style="flex: 1;">
-          <Card title1="SIMBOLOGÍA"></Card>
-        </div>
-      </div>
-      <Card v-if="mostrarCard" @change-component="mostrarComponente" title1="EMERGENCIA" :description1="[
-        { text1: 'Incencio en Valparaíso', buttonLabel: 'Ver tareas' },
-        { text1: 'Incencio en Valparaíso', buttonLabel: 'Ver tareas' },
-        { text1: 'Incencio en Valparaíso', buttonLabel: 'Ver tareas' },
-        { text1: 'Incencio en Valparaíso', buttonLabel: 'Ver tareas' },
-        { text1: 'Incencio en Valparaíso', buttonLabel: 'Ver tareas' },
-        { text1: 'Incencio en Valparaíso', buttonLabel: ' Ver tareas' }]" />
-      <ListCard2 v-if="mostrarTareas" @volver="mostrarComponente('Card')" />
-      <ListCard2 v-if="mostrarListCard2" :description1="[
-        { text1: 'Incencio - Valparaíso', buttonLabel: 'Ver Voluntarios' },
-        { text1: 'Terremoto - Santiago', buttonLabel: 'Ver Voluntarios' },
-        { text1: 'Terremoto - Región del Maule', buttonLabel: 'Ver Voluntarios' },
-        { text1: 'Erupción volcánica - Volcán Villarrica, Región de la Araucanía', buttonLabel: 'Ver Voluntarios' },
-        { text1: 'Inundación - Región de Coquimbo', buttonLabel: 'Ver Voluntarios' },
-        { text1: 'Incendio forestal - Región del Biobío ', buttonLabel: ' Ver Voluntarios' },
-        { text1: 'Incendio forestal - Región del Biobío ', buttonLabel: ' Ver Voluntarios' },
-        { text1: 'Incendio forestal - Región del Biobío ', buttonLabel: ' Ver Voluntarios' }]" title1="EMERGENCIA"
-        title2="Voluntarios" />
+        </section>
 
-      <!-- <ListCard v-if="mostrarListCard"
-        title1 = "Tareas de Emergencias inscritas"
-        :description1="[
-            {text1:'Primeros Auxilios',text2:'Incencio en Valparaíso' ,buttonLabel:'En proceso'},
-            {text1:'Recoger escombros',text2:'Incendio en Valparaíso', buttonLabel:'En proceso'},
-            {text1:'Primeros Auxilios',text2:'Incencio en Valparaíso' ,buttonLabel:'Terminada'},
-            {text1:'Primeros Auxilios',text2:'Incencio en Valparaíso' ,buttonLabel:'Terminada'},
-            {text1:'Primeros Auxilios',text2:'Incencio en Valparaíso' ,buttonLabel:'Terminada'},
-            {text1:'Primeros Auxilios',text2:'Incencio en Valparaíso' ,buttonLabel:'En pausa'}]"
-        title2= "TAREAS"
-        :description2="[
-            {text1:'Primeros Auxilios',text2:'Incencio en Valparaíso' ,buttonLabel:'Postular'},
-            {text1:'Recoger escombros',text2:'Incendio en Valparaíso', buttonLabel:'Aceptar'},
-            {text1:'Primeros Auxilios',text2:'Incencio en Valparaíso' ,buttonLabel:'Aceptar'},
-            {text1:'Primeros Auxilios',text2:'Incencio en Valparaíso' ,buttonLabel:'Aceptar'},
-            {text1:'Primeros Auxilios',text2:'Incencio en Valparaíso' ,buttonLabel:'Aceptar'},
-            {text1:'Primeros Auxilios',text2:'Incencio en Valparaíso' ,buttonLabel:'Aceptar'},
-            {text1:'Primeros Auxilios',text2:'Incencio en Valparaíso' ,buttonLabel:'Aceptar'},
-            {text1:'Primeros Auxilios',text2:'Incencio en Valparaíso' ,buttonLabel:'Aceptar'},
-            {text1:'Primeros Auxilios',text2:'Incencio en Valparaíso' ,buttonLabel:'Aceptar'}]">
-        </ListCard>
-        <ListCard2 v-else /> -->
-      <main></main>
-
-
+        <main>
+            <section class="section1">
+                <div id="map" style="height: 100%; width: 100%;"></div>
+            </section>
+            <section class="section2">
+                <button>Crear Emergencia</button>
+                <!-- TODO: en la segunda fila debe ir la leyenda del mapa con los puntos y su significado, debe cambiar a la lista de las emergencias cuando se seleccione en el mapa -->
+            </section>
+        </main>
     </div>
-  </div>
-  <FooterComponent></FooterComponent>
+
+
 </template>
 
 <script>
-//import axios from "axios";
-
-import SideMenu from '@/components/SideMenu.vue';
-import ListCard from '@/components/ListCard.vue';
-import ListCard2 from '@/components/ListCard2.vue';
-import Card from '@/components/Card.vue';
-import NavbarVoluntario from '@/components/NavbarVoluntario.vue';
-import FooterComponent from '@/components/FooterComponent.vue';
+import axios from 'axios';
 
 export default {
+    mounted() {
+        this.initMap();
+    },
+    methods: {
+        initMap() {
+            const script = document.createElement('script');
+            script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDd1yMKvX4PyaxaVtyauISsGrMvxYi6CgQ&libraries=places`;
+            script.async = true;
+            script.onload = () => this.loadMap();
+            document.head.appendChild(script);
+        },
+        loadMap() {
+            const map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: -33.447308, lng: -70.664213 },
+                zoom: 10,
+            });
 
-  components: {
-    Card,
-    ListCard,
-    ListCard2
-  },
-  data() {
-    return {
+            this.fetchPolygons(map);
+        },
+        fetchPolygons(map) {
+            axios.get('/api/regions')
+                .then(response => {
+                    response.data.forEach(region => {
+                        const polygon = new google.maps.Polygon({
+                            paths: this.wktToLatLng(region.wkt),
+                            strokeColor: '#FF0000',
+                            strokeOpacity: 0.8,
+                            strokeWeight: 2,
+                            fillColor: '#FF0000',
+                            fillOpacity: 0.35,
+                        });
 
-      mostrarListCard: false,
-      mostrarListCard2: false,
-      mostrarCard: false
-    };
-  },
-  methods: {
-    changeComponent(component) {
-      // Establece el estado correspondiente a true y los demás a false
-      this.mostrarListCard = component === 'ListCard1';
-      this.mostrarListCard2 = component === 'ListCard2';
-      this.mostrarCard = component === 'Card';
+                        polygon.setMap(map);
+
+                        google.maps.event.addListener(polygon, 'click', () => {
+                            this.showPolygonInfo(region.id, region.name);
+                        });
+                    });
+                });
+        },
+        wktToLatLng(wkt) {
+            const coords = wkt.match(/\(([^)]+)\)/)[1].split(',').map(point => {
+                const [lng, lat] = point.trim().split(' ').map(Number);
+                return { lat, lng };
+            });
+            return coords;
+        },
+        showPolygonInfo(id, name) {
+            alert(`Region: ${name} (ID: ${id})`);
+        },
+        toggleMenu() {
+            const aside = document.querySelector('aside');
+            aside.style.left = aside.style.left === '0%' ? '-100%' : '0%';
+            const section = document.querySelector('.aside-section');
+            section.style.left = section.style.left === '27%' ? '0%' : '27%';
+            section.style.transition = '0.5s ease-out';
+            // despues de 3 segundos se cambia el color de fondo
+            setTimeout(() => {
+                section.style.backgroundColor = 'rgba(0, 0, 0, 0.3)';
+            }, 1000);
+        },
+        toggleMenuBack() {
+            const aside = document.querySelector('aside');
+            aside.style.left = '-100%';
+            const section = document.querySelector('.aside-section');
+            section.style.transition = '0s';
+            section.style.backgroundColor = 'rgba(0, 0, 0, 0)';
+            section.style.left = '-100%';
+        },
     },
-    reset() {
-      // Restablece las variables de estado a sus valores originales
-      this.mostrarListCard = false; // o cualquier valor predeterminado que necesites
-      this.mostrarListCard2 = false;
-      this.mostrarCard = false;
-    },
-    mostrarComponente(componente) {
-      // Ocultar todos los componentes
-      this.mostrarCard = false;
-      this.mostrarTareas = false;
-      // Mostrar el componente deseado
-      if (componente === 'ListCard2') {
-        this.mostrarTareas = true;
-      } else if (componente === 'Card') {
-        this.mostrarCard = true;
-      }
-      // Mostrar otros componentes según sea necesario
-    },
-    mostrarComponente(buttonLabel) {
-      // Aquí puedes cambiar el componente según el botón presionado
-      if (buttonLabel === 'Ver tareas') {
-        // Cambiar al componente ListCard2
-        this.mostrarCard = false;
-        this.mostrarListCard2 = true;
-      }
-    }
-  }
-  /* mounted() {
-    // Realiza la solicitud HTTP al backend para obtener los datos
-    axios.get("URL_DEL_BACKEND")
-      .then(response => {
-        // Asigna los datos recibidos a la variable backendData
-        this.backendData = response.data;
-      })
-      .catch(error => {
-        console.error("Error al obtener los datos del backend:", error);
-      });
-  } */
 };
-
 
 </script>
 
-<style>
-.main-container {
-  position: relative;
-  overflow: hidden;
+<style scoped>
+.container-admin {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: white !important;
+    color: white;
+
 }
 
-.background-container {
-  position: relative;
-  /* overflow: hidden; */
-
+nav img {
+    width: 30px;
+    height: 30px;
+    margin: 20px;
+    filter: invert(1);
+    cursor: pointer;
 }
 
-body {
-  margin: 0;
-  color: black;
-  background-color: rgb(255, 255, 255);
-  font-family: 'Roboto', sans-serif;
+nav {
+    background-color: #000000;
+    width: 100%;
+    height: 70px;
+    display: flex;
+    justify-content: left;
 }
 
-
-
-img {
-  width: 100%;
-  height: 100vh;
-  position: absolute;
-  z-index: -5;
-  object-fit: cover;
-  filter: brightness(0.25) invert(1);
-  background-repeat: repeat-y;
+nav h1 {
+    color: #ffffff;
+    font-size: 30px;
+    margin: 20px;
+    font-family: 'Roboto', sans-serif;
 }
 
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
+nav h3 {
+    color: #ffffff;
+    font-size: 20px;
+    margin: 26px;
+    margin-left: 3px;
+    margin-bottom: 1px;
+    font-family: 'Roboto', sans-serif;
 }
 
-.big-button {
-  font-size: 24px;
-  /* Tamaño del texto */
-  padding: 20px 40px;
-  /* Espacio interno del botón */
-  border: none;
-  /* Sin borde */
-  background-color: #347355;
-  /* Color de fondo del botón */
-  color: white;
-  /* Color del texto */
-  border-radius: 10px;
-  /* Borde redondeado */
-  cursor: pointer;
-  /* Cursor al pasar el ratón */
-  transition: background-color 0.3s;
-  /* Transición suave del color de fondo */
+main {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 20px;
+    margin: 20px;
+    width: 97%;
+    height: 84vh;
 }
 
-/* Estilos al pasar el ratón sobre el botón */
-.big-button:hover {
-  background-color: #000000;
-  /* Cambio de color de fondo */
+.section2 {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
 }
 
-.column {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  padding: 0 10px;
-  /* Añade un poco de espacio entre las columnas */
+.section2 button {
+    transition: 0.3s all;
+    background-color: #000000;
+    color: #ffffff;
+    font-size: 20px;
+    font-family: 'Roboto', sans-serif;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    margin: 20px;
+    padding: 10px;
+    width: 250px;
+    height: 50px;
+    justify-self: center;
+    align-self: center;
 }
 
-.boton {
-  display: flex;
-  justify-content: center;
-  padding: 0 10px;
-  /* Añade un poco de espacio entre las columnas */
-  margin-top: 75px;
+.section2 button:hover {
+    background-color: #ffffff;
+    color: #000000;
+    border: 1px solid #000000;
+}
+
+aside {
+    transition: 1s ease-out;
+    background-color: #000000;
+    width: 27%;
+    height: 100vh;
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: -100%;
+}
+
+.aside-section {
+    transition: 0.5s ease-out;
+    /* background-color: rgba(0, 0, 0, 0.3); */
+    background-color: none;
+    width: 73%;
+    height: 100vh;
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: -100%;
+}
+
+aside h1 {
+    color: #ffffff;
+    font-size: 30px;
+    margin: 20px;
+    font-family: 'Roboto', sans-serif;
+}
+
+aside img {
+    width: 30px;
+    height: 30px;
+    margin: 20px;
+    filter: invert(1);
+    cursor: pointer;
 }
 </style>
