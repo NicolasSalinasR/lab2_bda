@@ -75,4 +75,6 @@ public class EstadoTareaController {
         // auditoriaService.registrarCambio(idUsuario, "delete", "elimino un estado
         // tarea");
     }
+
+
 }

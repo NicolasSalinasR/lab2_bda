@@ -35,7 +35,7 @@ public class VoluntarioHabilidadController {
 
     @GetMapping("/all")
     public List<VoluntarioHabilidadEntity> getAllVoluntarioHabilidades() {
-        return voluntarioHabilidadService.getAllVoluntarioHabilidades();
+        return voluntarioHabilidadService.listaVoluntarioHabilidad();
     }
 
     @PostMapping("/add")
@@ -49,7 +49,7 @@ public class VoluntarioHabilidadController {
         VoluntarioHabilidadEntity voluntarioHabilidad = new VoluntarioHabilidadEntity(voluntarioNew, habilidadNew);
         Long idUsuario = 2L;
         //auditoriaService.registrarCambio(idUsuario, "Add", "añadio una voluntario Habilidad");
-        voluntarioHabilidadService.insertarVoluntarioHabilidad(idHabilidad,idVoluntario);
+        voluntarioHabilidadService.insertarVoluntarioHabilidad(idHabilidad, idVoluntario);
 
         // Long idUsuario = //metodo para obtener id de usuario ya listo, esperar a
         // pablo
@@ -58,4 +58,13 @@ public class VoluntarioHabilidadController {
         return voluntarioHabilidad;
     }
 
+    @DeleteMapping("/delete/{idVoluntario}")
+    public void eliminar(@PathVariable Long id) {
+        Long idUsuario = 2L;//metodo para obtener id de usuario ya listo, esperar a
+        // pablo
+        //auditoriaService.registrarCambio(idUsuario, "Delete", "elimino unvoluntario");
+        voluntarioHabilidadService.eliminarVoluntarioHabilidadPorId(id);
+
+
+    }
 }

@@ -1,10 +1,13 @@
 package bdabackend.bda.Service;
 
+import bdabackend.bda.Entity.InstitucionEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import bdabackend.bda.Entity.TareaHabilidadEntity;
 import bdabackend.bda.Repository.TareaHabilidadRepository;
+
+import java.util.List;
 
 @Service
 public class TareaHabilidadService {
@@ -25,5 +28,9 @@ public class TareaHabilidadService {
 
     public TareaHabilidadEntity buscarTareaHabilidadPorId(Long id) {
         return tareaHabilidadRepository.buscarTareaHabilidadPorId(id);
+    }
+
+    public List<TareaHabilidadEntity> listaTareaHabilidad() {
+        return tareaHabilidadRepository.listaTareaHabilidad();
     }
 }

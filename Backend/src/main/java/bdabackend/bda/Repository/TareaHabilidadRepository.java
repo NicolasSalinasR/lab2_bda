@@ -1,5 +1,6 @@
 package bdabackend.bda.Repository;
 
+import bdabackend.bda.Entity.InstitucionEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -7,6 +8,8 @@ import org.springframework.stereotype.Repository;
 import bdabackend.bda.Entity.TareaHabilidadEntity;
 import jakarta.transaction.Transactional;
 import org.springframework.data.repository.query.Param;
+
+import java.util.List;
 
 @Repository
 public interface TareaHabilidadRepository extends JpaRepository<TareaHabilidadEntity, Long> {
@@ -29,6 +32,9 @@ public interface TareaHabilidadRepository extends JpaRepository<TareaHabilidadEn
         // Leer
         @Query("SELECT v FROM TareaHabilidadEntity v WHERE v.id = ?1")
         public TareaHabilidadEntity buscarTareaHabilidadPorId(Long id);
+
+        @Query("SELECT v FROM TareaHabilidadEntity v")
+        public List<TareaHabilidadEntity> listaTareaHabilidad();
 
         // Delete
         @Transactional

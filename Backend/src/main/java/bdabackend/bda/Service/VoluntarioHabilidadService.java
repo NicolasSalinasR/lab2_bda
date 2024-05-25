@@ -1,10 +1,13 @@
 package bdabackend.bda.Service;
 
+import bdabackend.bda.Entity.InstitucionEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import bdabackend.bda.Entity.VoluntarioHabilidadEntity;
 import bdabackend.bda.Repository.VoluntarioHabilidadRepository;
+
+import java.util.List;
 
 @Service
 public class VoluntarioHabilidadService {
@@ -21,5 +24,9 @@ public class VoluntarioHabilidadService {
 
     public VoluntarioHabilidadEntity buscarVoluntarioHabilidadPorId(Long id) {
         return voluntarioHabilidadRepository.buscarVoluntarioHabilidadPorId(id);
+    }
+
+    public List<VoluntarioHabilidadEntity> listaVoluntarioHabilidad() {
+        return voluntarioHabilidadRepository.listaVoluntarioHabilidad();
     }
 }

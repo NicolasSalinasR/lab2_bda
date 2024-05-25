@@ -33,4 +33,9 @@ public class TareaService {
     public List<TareaEntity> listaTarea() {
         return tareaRepository.listaTarea();
     }
+
+    public List<TareaEntity> getRankingTarea(String nombreTarea) {
+        return tareaRepository.listRankingTarea(nombreTarea);
+    }
+
 }
