@@ -1,5 +1,6 @@
 package bdabackend.bda.Repository;
 
+import bdabackend.bda.Entity.HabilidadEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -7,6 +8,8 @@ import org.springframework.stereotype.Repository;
 import bdabackend.bda.Entity.EstadoTareaEntity;
 import jakarta.transaction.Transactional;
 import org.springframework.data.repository.query.Param;
+
+import java.util.List;
 
 @Repository
 public interface EstadoTareaRepository extends JpaRepository<EstadoTareaEntity, Long> {
@@ -26,4 +29,7 @@ public interface EstadoTareaRepository extends JpaRepository<EstadoTareaEntity, 
     @Modifying
     @Query("DELETE FROM EstadoTareaEntity v WHERE v.id = :id")
     public void eliminarEstadoTareaPorId(@Param("id") Long id);
+
+    @Query("SELECT v FROM EstadoTareaEntity v")
+    public List<EstadoTareaEntity> listaEstadoTarea();
 }

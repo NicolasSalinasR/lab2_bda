@@ -6,6 +6,7 @@ import bdabackend.bda.Service.AuditoriaService;
 import bdabackend.bda.Service.EmergenciaService;
 import bdabackend.bda.Service.InstitucionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.geo.Point;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,13 +45,17 @@ public class EmergenciaController {
         Long idInstitucion = Long.parseLong(body.get("idInstitucion"));
         Double latitud = Double.parseDouble(body.get("latitud"));
         Double longitud = Double.parseDouble(body.get("longitud"));
+        int cantidadVoluntariosMinimo2 = Integer.parseInt( cantidadVoluntariosMinimo);
+        int cantidadVoluntariosMaximo2 = Integer.parseInt(cantidadVoluntariosMaximo );
 
         InstitucionEntity institucion = institucionService.buscarInstitucionPorId(idInstitucion);
 
+        Point zona =  new Point(latitud, longitud);
+
         Long idUsuario = 1L;
         //auditoriaService.registrarCambio(idUsuario, "Add", "añadio una emergencia");
-        emergenciaService.insertarEmergencia(tipoEmergencia, latitud, longitud, condicionFisica,
-                cantidadVoluntariosMinimo, cantidadVoluntariosMaximo, institucion);
+        emergenciaService.insertarEmergencia(tipoEmergencia, zona, condicionFisica,
+                cantidadVoluntariosMinimo2, cantidadVoluntariosMaximo2, idInstitucion);
 
         // Long idUsuario = //metodo para obtener id de usuario ya listo, esperar a
         // pablo
@@ -58,4 +63,5 @@ public class EmergenciaController {
 // ! Se debe cambiar al terminar el front por seguridad de que no devuelva
         // ! datos, solo debe devolver una respuesta de que se guardo correctamente
     }
+    
 }

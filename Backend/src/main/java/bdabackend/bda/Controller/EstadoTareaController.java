@@ -29,10 +29,10 @@ public class EstadoTareaController {
         return estadoTareaService.buscarEstadoTareaPorId(id);
     }
 
-//    @GetMapping("/all")
-//    public List<EstadoTareaEntity> getAllEstadoTarea() {
-//        return estadoTareaService.;
-//    }
+    @GetMapping("/all")
+    public List<EstadoTareaEntity> getAllEstadoTarea() {
+        return estadoTareaService.listaHabilidad();
+    }
 
     @GetMapping("/Tarea/{id}")
     public EstadoTareaEntity getEstadoTareaIdTarea(@PathVariable Long id) {
