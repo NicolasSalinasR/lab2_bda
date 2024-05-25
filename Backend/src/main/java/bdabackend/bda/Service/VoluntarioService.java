@@ -17,10 +17,6 @@ public class VoluntarioService {
         voluntarioRepository.insertarVoluntario(voluntario.getNombre(), voluntario.getCorreo(),
                 voluntario.getNumeroDocumento(), voluntario.getZonaVivienda(), voluntario.getContrasena(),
                 voluntario.getEquipamiento());
-            String contrasena, String equipamiento) {
-        voluntarioRepository.insertarVoluntario(nombre, correo, numeroDocumento, zonaVivienda, contrasena,
-                equipamiento);
->>>>>>> 623cd353d3b3925d113956072c6a2c03e035571c
     }
 
     public void eliminarVoluntarioPorId(Long id) {

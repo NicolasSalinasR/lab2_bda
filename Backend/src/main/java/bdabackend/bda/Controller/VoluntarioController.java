@@ -1,4 +1,5 @@
 package bdabackend.bda.Controller;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,6 +26,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
+
 @RestController
 @RequestMapping("/voluntario")
 @CrossOrigin("*")
@@ -37,6 +39,7 @@ public class VoluntarioController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> login(@RequestBody Map<String, String> body) {
         // Se recibe el correo y la contraseña
@@ -54,7 +57,7 @@ public class VoluntarioController {
         String correo = body.get("correo");
         String numeroDocumento = body.get("numeroDocumento");
         // TODO: Cambiar el tipo de dato de zonaVivienda a Point, agregar la logica
-        String zonaVivienda = body.get("zonaVivienda");
+        Point zonaVivienda = new Point(0, 0); // TODO: se debe cambiar por el parametro de entrada
         String contrasena = body.get("contrasena");
         String equipamiento = body.get("equipamiento");
 
@@ -67,3 +70,4 @@ public class VoluntarioController {
         voluntarioService.insertarVoluntario(voluntario);
         return voluntario;
     }
+}

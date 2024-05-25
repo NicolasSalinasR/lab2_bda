@@ -84,11 +84,11 @@ public class VoluntarioEntity {
         this.numeroDocumento = numeroDocumento;
     }
 
-    public String getZonaVivienda() {
+    public Point getZonaVivienda() {
         return this.zonaVivienda;
     }
 
-    public void setZonaVivienda(String zonaVivienda) {
+    public void setZonaVivienda(Point zonaVivienda) {
         this.zonaVivienda = zonaVivienda;
     }
 

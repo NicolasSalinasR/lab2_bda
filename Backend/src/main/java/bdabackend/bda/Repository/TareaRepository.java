@@ -44,11 +44,11 @@ public interface TareaRepository extends JpaRepository<TareaEntity, Long> {
         public void eliminarTareaPorId(@Param("id") Long id);
 
         @Query("SELECT t.nombreTarea, v.nombreVoluntario, r.nivelRanking " +
-                "FROM VoluntarioEntity v, TareaEntity t, RankingEntity r " +
-                "WHERE t.nombreTarea = :nombreTarea AND v.idVoluntario = r.voluntario.idVoluntario AND t.idTarea = r.tarea.idTarea "
-                +
-                "ORDER BY r.nivelRanking DESC")
-                "GROUP BY t.nombreTarea, v.nombreVoluntario, r.nivelRanking " +
+                        "FROM VoluntarioEntity v, TareaEntity t, RankingEntity r " +
+                        "WHERE t.nombreTarea = :nombreTarea AND v.idVoluntario = r.voluntario.idVoluntario AND t.idTarea = r.tarea.idTarea "
+                        +
+                        "GROUP BY t.nombreTarea, v.nombreVoluntario, r.nivelRanking " +
+                        "ORDER BY r.nivelRanking DESC")
         List<TareaEntity> listRankingTarea(@Param("nombreTarea") String nombreTarea);
 
         @Query("SELECT v FROM TareaEntity v WHERE v.emergencia = :id")

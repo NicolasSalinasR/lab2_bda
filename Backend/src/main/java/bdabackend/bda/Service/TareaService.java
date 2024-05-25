@@ -38,8 +38,7 @@ public class TareaService {
         return tareaRepository.listRankingTarea(nombreTarea);
     }
 
-
+    public List<TareaEntity> tablaTareas(Long id) {
         return tareaRepository.tablaTareas(id);
-    public List<TareaEntity> tablaTareas(Long id){
     }
 }
