@@ -35,7 +35,7 @@ public class VoluntarioHabilidadController {
 
     @GetMapping("/all")
     public List<VoluntarioHabilidadEntity> getAllVoluntarioHabilidades() {
-        return voluntarioHabilidadService.getAllVoluntarioHabilidades();
+        return voluntarioHabilidadService.listaVoluntarioHabilidad();
     }
 
     @PostMapping("/add")

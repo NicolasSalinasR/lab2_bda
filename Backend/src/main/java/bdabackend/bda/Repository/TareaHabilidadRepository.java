@@ -8,6 +8,8 @@ import bdabackend.bda.Entity.TareaHabilidadEntity;
 import jakarta.transaction.Transactional;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 @Repository
 public interface TareaHabilidadRepository extends JpaRepository<TareaHabilidadEntity, Long> {
         // Crear
@@ -35,4 +37,7 @@ public interface TareaHabilidadRepository extends JpaRepository<TareaHabilidadEn
         @Modifying
         @Query("DELETE FROM TareaHabilidadEntity v WHERE v.id = :id")
         public void eliminarTareaHabilidadPorId(@Param("id") Long id);
+
+        @Query("SELECT v FROM TareaHabilidadEntity v")
+        public List<TareaHabilidadEntity> listaTareaHabilidad();
 }

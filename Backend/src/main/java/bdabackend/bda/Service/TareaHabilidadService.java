@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import bdabackend.bda.Entity.TareaHabilidadEntity;
 import bdabackend.bda.Repository.TareaHabilidadRepository;
 
+import java.util.List;
+
 @Service
 public class TareaHabilidadService {
     @Autowired
@@ -25,5 +27,9 @@ public class TareaHabilidadService {
 
     public TareaHabilidadEntity buscarTareaHabilidadPorId(Long id) {
         return tareaHabilidadRepository.buscarTareaHabilidadPorId(id);
+    }
+
+    public List<TareaHabilidadEntity> listaTareaHabilidad() {
+        return tareaHabilidadRepository.listaTareaHabilidad();
     }
 }

@@ -52,15 +52,15 @@ public interface RankingRepository extends JpaRepository<RankingEntity, Long> {
     @Query("DELETE FROM RankingEntity v WHERE v.id = :id")
     public void eliminarRankingPorId(@Param("id") Long id);
 
-    @Query("SELECT v.zonaEmergencia FROM EmergenciaEntity v WHERE v.id = :id")
-    public List<?> sacarZonaEmergencia(@Param("id") Long id);
+    @Query(value = "SELECT * FROM emergencia WHERE emergencia.id =?1", nativeQuery = true)
+    public List<?> sacarZonaEmergencia(@Param("v") Long id);
 
-    @Query("SELECT v.zonaVivienda FROM VoluntarioEntity v WHERE v.id = :id")
-    public List<?> sacarZonaVoluntario(@Param("id") Long id);
+    @Query(value = "SELECT * FROM voluntario WHERE voluntario.id =?1", nativeQuery = true)
+    public List<?> sacarZonaVoluntario(@Param("v") Long id);
 
     @Query("SELECT v.habilidadRequerida FROM TareaHabilidadEntity v WHERE v.habilidadRequerida LIKE CONCAT('%', :equipo, '%')")
     public List<String> matchEquipo(@Param("equipo") String equipo);
 
-    @Query("SELECT COUNT(v) FROM VoluntarioHabilidadEntity v WHERE v.voluntario.idVoluntario=:id")
+    @Query("SELECT COUNT(v) FROM VoluntarioHabilidadEntity v WHERE v.voluntario.id=:id")
     public int matchHabilidad(@Param("id") Long id);
 }

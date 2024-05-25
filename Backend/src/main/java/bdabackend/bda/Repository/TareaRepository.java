@@ -45,4 +45,19 @@ public interface TareaRepository extends JpaRepository<TareaEntity, Long> {
 
         @Query("SELECT v FROM TareaEntity v WHERE v.emergencia = :id")
         public List<TareaEntity> tablaTareas(@Param("id") Long id);
+
+        @Query("SELECT t.nombre, v.nombre, r.nivel " +
+                "FROM VoluntarioEntity v, TareaEntity t, RankingEntity r " +
+                "WHERE t.nombre = :nombreTarea AND v.id = r.voluntario.id AND t.id = r.tarea.id "
+                +
+                "GROUP BY t.nombre, v.nombre, r.nivel " +
+                "ORDER BY r.nivel DESC")
+        List<TareaEntity> listRankingTarea(@Param("nombreTarea") String nombreTarea);
+
+        @Query(value = "SELECT * FROM tarea WHERE tarea.id_emergencia =?1", nativeQuery = true)
+        public  List<?> tareasPorEmergencia (@Param("v") Long id);
+
+        @Query("SELECT v.nombre FROM TareaEntity v WHERE v.id = :id")
+        public String nombre (@Param("id") Long id);
 }
+

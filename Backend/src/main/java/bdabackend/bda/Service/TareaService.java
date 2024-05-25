@@ -1,9 +1,14 @@
 package bdabackend.bda.Service;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.List;
+import java.util.Locale;
 
+import bdabackend.bda.Entity.EmergenciaEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.geo.Point;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import bdabackend.bda.Entity.TareaEntity;
@@ -36,5 +41,33 @@ public class TareaService {
 
     public List<TareaEntity> tablaTareas(Long id){
         return tareaRepository.tablaTareas(id);
+    }
+
+    public List<TareaEntity> getRankingTarea(String nombreTarea) {
+        return tareaRepository.listRankingTarea(nombreTarea);
+    }
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    public void crearTarea(String nombre, String descripcion, String tipo,
+                                Double latitud, Double longitud, Long idEmergencia) {
+
+        // Convierte las coordenadas a un formato adecuado para PostgreSQL, como WKT
+        DecimalFormat df = new DecimalFormat("#.######", new DecimalFormatSymbols(Locale.US));
+        String zonaViviendaWKT = String.format("POINT(%s %s)", df.format(longitud), df.format(latitud));
+
+        // Ejecuta la consulta SQL parametrizada para insertar el nuevo voluntario
+        jdbcTemplate.update("INSERT INTO tarea (nombre, descripcion, "
+                        + "tipo, zona, id_emergencia) VALUES (?, ?, ?, ST_GeomFromText(?), ?)", nombre,
+                descripcion, tipo, zonaViviendaWKT, idEmergencia);
+    }
+
+    public List<?> tareaEmerg (Long id){
+        return tareaRepository.tareasPorEmergencia(id);
+    }
+
+    public String nombre(Long id){
+        return tareaRepository.nombre(id);
     }
 }

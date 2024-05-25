@@ -56,21 +56,22 @@ public class TareaController {
     }
 
     @PostMapping("/add")
-    public TareaEntity addTarea(@RequestBody Map<String, String> body) {
+    public void addTarea(@RequestBody Map<String, String> body) {
         String nombreTarea = body.get("nombreTarea");
         String descripcionTarea = body.get("descripcionTarea");
         String tipoTarea = body.get("tipoTarea");
         Long emergencia = Long.parseLong(body.get("emergencia"));
-        Point zonaTarea = new Point(Double.parseDouble(body.get("latitud")), Double.parseDouble(body.get("longitud")));
-        EmergenciaEntity emergencia1 = emergenciaService.buscarEmergenciaPorId(emergencia);
-        TareaEntity tarea = new TareaEntity(nombreTarea, descripcionTarea, tipoTarea, zonaTarea);
+        Double latitud = Double.parseDouble(body.get("latitud"));
+        Double longitud = Double.parseDouble(body.get("longitud"));
+        //EmergenciaEntity emergencia1 = emergenciaService.buscarEmergenciaPorId(emergencia);
+        //TareaEntity tarea = new TareaEntity(nombreTarea, descripcionTarea, tipoTarea, zonaTarea);
         Long idUsuario = 1L;
-        // auditoriaService.registrarCambio(idUsuario, "Add", "añadio una tarea");
-        tareaService.insertarTarea(nombreTarea, descripcionTarea, tipoTarea, zonaTarea, emergencia);
+        //// auditoriaService.registrarCambio(idUsuario, "Add", "añadio una tarea");
+        tareaService.crearTarea(nombreTarea, descripcionTarea, tipoTarea, latitud, longitud, emergencia);
 
         // Long idUsuario = //metodo para obtener id de usuario ya listo, esperar a
         // pablo
         // auditoriaService.registrarCambio(idUsuario, "Add", "añadio una tarea");
-        return tarea;
+        //return tarea;
     }
 }

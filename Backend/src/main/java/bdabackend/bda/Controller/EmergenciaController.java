@@ -50,11 +50,10 @@ public class EmergenciaController {
 
         InstitucionEntity institucion = institucionService.buscarInstitucionPorId(idInstitucion);
 
-        Point zona =  new Point(latitud, longitud);
 
         Long idUsuario = 1L;
         //auditoriaService.registrarCambio(idUsuario, "Add", "añadio una emergencia");
-        emergenciaService.insertarEmergencia(tipoEmergencia, zona, condicionFisica,
+        emergenciaService.crearEmergencia(tipoEmergencia, latitud, longitud, condicionFisica,
                 cantidadVoluntariosMinimo2, cantidadVoluntariosMaximo2, idInstitucion);
 
         // Long idUsuario = //metodo para obtener id de usuario ya listo, esperar a

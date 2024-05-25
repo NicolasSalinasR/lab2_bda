@@ -51,6 +51,7 @@ public class RankingService {
         return rankingRepository.sacarZonaVoluntario(id);
     }
 
+/*
     public double distanciaEntrePuntos(double latitudPunto1, double longitudPunto1, double latitudPunto2, double longitudPunto2) {
         // Radio de la Tierra en metros
 
@@ -103,11 +104,11 @@ public class RankingService {
         }
         return data;
     }
+ */
 
     public int puntajeRanking(Double distancia, Long idVoluntario) {
         int contador = 0;
-        VoluntarioEntity voluntarioEntity = voluntarioService.buscarVoluntarioPorId(idVoluntario);
-        String equipo = voluntarioEntity.getEquipamiento();
+        String equipo = voluntarioService.eqipamientov(idVoluntario);
         String[] elementos = equipo.split("\s,\s");
         for (String elemento : elementos) {
             List<String> resultadoFuncion = rankingRepository.matchEquipo(elemento);

@@ -49,20 +49,19 @@ public class EmeHabilidadController {
   //  }
 
     @PostMapping("/add")
-    public EmergenciaHabilidadEntity addEmeHabilidad(@RequestBody Map<String, String> body) {
+    public void addEmeHabilidad(@RequestBody Map<String, String> body) {
         Long idEmergencia = Long.parseLong(body.get("emergencia"));
         Long idHabilidad = Long.parseLong(body.get("habilidad"));
-        EmergenciaEntity emergenciaNew = emergenciaService.buscarEmergenciaPorId(idEmergencia);
-        HabilidadEntity habilidadNew = habilidadService. buscarHabilidadPorId(idHabilidad);
-        EmergenciaHabilidadEntity emeHabilidad = new EmergenciaHabilidadEntity(emergenciaNew, habilidadNew);
-        Long idUsuario = 1L;
+        //EmergenciaEntity emergenciaNew = emergenciaService.buscarEmergenciaPorId(idEmergencia);
+        //HabilidadEntity habilidadNew = habilidadService. buscarHabilidadPorId(idHabilidad);
+        //EmergenciaHabilidadEntity emeHabilidad = new EmergenciaHabilidadEntity(emergenciaNew, habilidadNew);
+        //Long idUsuario = 1L;
         //auditoriaService.registrarCambio(idUsuario, "Add", "añadio una emergencia Habilidad");
         emeHabilidadService.insertarEmergenciaHabilidad(idHabilidad, idEmergencia);
         // Long idUsuario = //metodo para obtener id de usuario ya listo, esperar a
         // pablo
         // auditoriaService.registrarCambio(idUsuario, "Add", "añadio una emergencia
         // Habilidad");
-        return emeHabilidad;
     }
 
     // @DeleteMapping("delete/{id}")

@@ -1,6 +1,7 @@
 package bdabackend.bda.Entity;
 
 import jakarta.persistence.*;
+import org.springframework.data.geo.Point;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -22,7 +23,7 @@ public class VoluntarioEntity {
     private String numeroDocumento;
 
     @Column(name = "zona_vivienda", columnDefinition = "geometry(Point,4326)")
-    private String zonaVivienda;
+    private Point zonaVivienda;
 
     @Column(name = "contrasena")
     private String contrasena;
@@ -40,7 +41,7 @@ public class VoluntarioEntity {
     public VoluntarioEntity() {
     }
 
-    public VoluntarioEntity(String nombre, String correo, String numeroDocumento, String zonaVivienda,
+    public VoluntarioEntity(String nombre, String correo, String numeroDocumento, Point zonaVivienda,
             String contrasena, String equipamiento) {
         this.nombre = nombre;
         this.correo = correo;
@@ -83,11 +84,11 @@ public class VoluntarioEntity {
         this.numeroDocumento = numeroDocumento;
     }
 
-    public String getZonaVivienda() {
+    public Point getZonaVivienda() {
         return this.zonaVivienda;
     }
 
-    public void setZonaVivienda(String zonaVivienda) {
+    public void setZonaVivienda(Point zonaVivienda) {
         this.zonaVivienda = zonaVivienda;
     }
 
