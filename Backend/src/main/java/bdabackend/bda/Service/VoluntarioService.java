@@ -13,13 +13,10 @@ public class VoluntarioService {
     @Autowired
     private VoluntarioRepository voluntarioRepository;
 
-<<<<<<< HEAD
     public void insertarVoluntario(VoluntarioEntity voluntario) {
         voluntarioRepository.insertarVoluntario(voluntario.getNombre(), voluntario.getCorreo(),
                 voluntario.getNumeroDocumento(), voluntario.getZonaVivienda(), voluntario.getContrasena(),
                 voluntario.getEquipamiento());
-=======
-    public void insertarVoluntario(String nombre, String correo, String numeroDocumento, Point zonaVivienda,
             String contrasena, String equipamiento) {
         voluntarioRepository.insertarVoluntario(nombre, correo, numeroDocumento, zonaVivienda, contrasena,
                 equipamiento);
