@@ -1,6 +1,7 @@
 package bdabackend.bda.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
 import bdabackend.bda.Entity.VoluntarioEntity;
 import bdabackend.bda.Repository.VoluntarioRepository;
@@ -12,7 +13,7 @@ public class VoluntarioService {
     @Autowired
     private VoluntarioRepository voluntarioRepository;
 
-    public void insertarVoluntario(String nombre, String correo, String numeroDocumento, String zonaVivienda,
+    public void insertarVoluntario(String nombre, String correo, String numeroDocumento, Point zonaVivienda,
             String contrasena, String equipamiento) {
         voluntarioRepository.insertarVoluntario(nombre, correo, numeroDocumento, zonaVivienda, contrasena,
                 equipamiento);

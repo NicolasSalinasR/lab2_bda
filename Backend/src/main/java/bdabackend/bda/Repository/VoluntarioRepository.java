@@ -1,5 +1,6 @@
 package bdabackend.bda.Repository;
 
+import org.springframework.data.geo.Point;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -19,7 +20,7 @@ public interface VoluntarioRepository extends JpaRepository<VoluntarioEntity, Lo
                         +
                         "VALUES (:nombre, :correo, :numeroDocumento, :zonaVivienda, :contrasena, :equipamiento)", nativeQuery = true)
         public void insertarVoluntario(@Param("nombre") String nombre, @Param("correo") String correo,
-                        @Param("numeroDocumento") String numeroDocumento, @Param("zonaVivienda") String zonaVivienda,
+                        @Param("numeroDocumento") String numeroDocumento, @Param("zonaVivienda") Point zonaVivienda,
                         @Param("contrasena") String contrasena, @Param("equipamiento") String equipamiento);
 
         // Leer

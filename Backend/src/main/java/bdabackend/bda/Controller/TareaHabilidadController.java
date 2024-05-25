@@ -38,7 +38,7 @@ public class TareaHabilidadController {
 
     @GetMapping("/all")
     public List<TareaHabilidadEntity> getAllTareaHabilidad() {
-        return tareaHabilidadService.getAllTareaHabilidades();
+        return tareaHabilidadService.listaTareaHabilidad();
     }
 
     @PostMapping("/add")
@@ -85,4 +85,6 @@ public class TareaHabilidadController {
 
 
     }
+
+
 }

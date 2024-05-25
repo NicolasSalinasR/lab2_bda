@@ -63,5 +63,10 @@ public class EmergenciaController {
 // ! Se debe cambiar al terminar el front por seguridad de que no devuelva
         // ! datos, solo debe devolver una respuesta de que se guardo correctamente
     }
-    
+
+    @DeleteMapping("delete/{id}")
+    public void Eliminar(@PathVariable Long id){
+        emergenciaService.eliminarEmergenciaPorId(id);
+    }
+
 }

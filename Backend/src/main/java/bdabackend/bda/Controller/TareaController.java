@@ -73,4 +73,9 @@ public class TareaController {
         // auditoriaService.registrarCambio(idUsuario, "Add", "añadio una tarea");
         return tarea;
     }
+
+    @DeleteMapping("/delete/{id}")
+    public void Eliminar(@PathVariable Long id) {
+        tareaService.eliminarTareaPorId(id);
+    }
 }
