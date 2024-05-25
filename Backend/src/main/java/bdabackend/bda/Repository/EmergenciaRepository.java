@@ -1,5 +1,6 @@
 package bdabackend.bda.Repository;
 
+import org.springframework.data.geo.Point;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -17,7 +18,7 @@ public interface EmergenciaRepository extends JpaRepository<EmergenciaEntity, Lo
     @Modifying
     @Query(value = "INSERT INTO emergencia (tipo_emergencia, zona_emergencia, condicion_fisica, cantidad_voluntarios_minimo, cantidad_voluntarios_maximo, id_institucion) VALUES (:tipoEmergencia, :zonaEmergencia, :condicionFisica, :cantidadVoluntariosMin, :cantidadVoluntariosMax, :institucion)", nativeQuery = true)
     public void insertarEmergencia(@Param("tipoEmergencia") String tipoEmergencia,
-            @Param("zonaEmergencia") String zonaEmergencia,
+            @Param("zonaEmergencia") Point zonaEmergencia,
             @Param("condicionFisica") String condicionFisica,
             @Param("cantidadVoluntariosMin") int cantidadVoluntariosMin,
             @Param("cantidadVoluntariosMax") int cantidadVoluntariosMax,

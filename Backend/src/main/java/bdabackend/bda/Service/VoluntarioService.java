@@ -1,6 +1,7 @@
 package bdabackend.bda.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
 import bdabackend.bda.Entity.VoluntarioEntity;
 import bdabackend.bda.Repository.VoluntarioRepository;
@@ -12,10 +13,17 @@ public class VoluntarioService {
     @Autowired
     private VoluntarioRepository voluntarioRepository;
 
+<<<<<<< HEAD
     public void insertarVoluntario(VoluntarioEntity voluntario) {
         voluntarioRepository.insertarVoluntario(voluntario.getNombre(), voluntario.getCorreo(),
                 voluntario.getNumeroDocumento(), voluntario.getZonaVivienda(), voluntario.getContrasena(),
                 voluntario.getEquipamiento());
+=======
+    public void insertarVoluntario(String nombre, String correo, String numeroDocumento, Point zonaVivienda,
+            String contrasena, String equipamiento) {
+        voluntarioRepository.insertarVoluntario(nombre, correo, numeroDocumento, zonaVivienda, contrasena,
+                equipamiento);
+>>>>>>> 623cd353d3b3925d113956072c6a2c03e035571c
     }
 
     public void eliminarVoluntarioPorId(Long id) {

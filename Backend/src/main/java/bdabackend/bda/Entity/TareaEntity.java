@@ -1,6 +1,7 @@
 package bdabackend.bda.Entity;
 
 import jakarta.persistence.*;
+import org.springframework.data.geo.Point;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -22,7 +23,7 @@ public class TareaEntity {
     private String tipo;
 
     @Column(name = "zona", columnDefinition = "geometry(Point,4326)")
-    private String zona;
+    private Point zona;
 
     @OneToMany(mappedBy = "tarea")
     private Set<RankingEntity> ranking = new HashSet<>();
@@ -41,7 +42,7 @@ public class TareaEntity {
     public TareaEntity() {
     }
 
-    public TareaEntity(String nombre, String descripcion, String tipo, String zona) {
+    public TareaEntity(String nombre, String descripcion, String tipo, Point zona) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.tipo = tipo;
@@ -81,11 +82,11 @@ public class TareaEntity {
         this.tipo = tipo;
     }
 
-    public String getZona() {
+    public Point getZona() {
         return this.zona;
     }
 
-    public void setZona(String zona) {
+    public void setZona(Point zona) {
         this.zona = zona;
     }
 
