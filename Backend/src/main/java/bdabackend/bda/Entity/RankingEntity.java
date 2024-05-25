@@ -10,7 +10,7 @@ public class RankingEntity {
     private Long id;
 
     @Column(name = "nivel")
-    private String nivel;
+    private int nivel;
 
     @Column(name = "tarea_ranking")
     private String tareaRanking;
@@ -33,7 +33,7 @@ public class RankingEntity {
     public RankingEntity() {
     }
 
-    public RankingEntity(String nivel, String tareaRanking, String nombreVoluntario, String numeroDocumentoVoluntario) {
+    public RankingEntity(int nivel, String tareaRanking, String nombreVoluntario, String numeroDocumentoVoluntario) {
         this.nivel = nivel;
         this.tareaRanking = tareaRanking;
         this.nombreVoluntario = nombreVoluntario;
@@ -50,11 +50,11 @@ public class RankingEntity {
         this.id = id;
     }
 
-    public String getNivel() {
+    public int getNivel() {
         return this.nivel;
     }
 
-    public void setNivel(String nivel) {
+    public void setNivel(int nivel) {
         this.nivel = nivel;
     }
 

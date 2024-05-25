@@ -42,4 +42,7 @@ public interface TareaRepository extends JpaRepository<TareaEntity, Long> {
         @Modifying
         @Query("DELETE FROM TareaEntity v WHERE v.id = :id")
         public void eliminarTareaPorId(@Param("id") Long id);
+
+        @Query("SELECT v FROM TareaEntity v WHERE v.emergencia = :id")
+        public List<TareaEntity> tablaTareas(@Param("id") Long id);
 }

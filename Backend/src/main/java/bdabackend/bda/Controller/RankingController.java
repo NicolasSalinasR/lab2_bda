@@ -12,6 +12,9 @@ import org.springframework.data.geo.Point;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.List;
 
 @RestController
@@ -33,6 +36,7 @@ public class RankingController {
         return rankingService.listaRanking();
     }
 
+/*
     @GetMapping("/palabra/{palabraClave}")
     public ResponseEntity<List<RankingEntity>> buscarRankings(@PathVariable String palabraClave) {
         List<RankingEntity> rankingsEncontrados = rankingService.listaFiltro(palabraClave);
@@ -41,6 +45,7 @@ public class RankingController {
         }
         return ResponseEntity.ok(rankingsEncontrados);
     }
+ */
 
     @GetMapping("/listaRanking")
     public List<RankingEntity> listaRanking() {
@@ -61,6 +66,51 @@ public class RankingController {
 
         return ResponseEntity.ok(rankingEncontrado);
     }
+    @PostMapping("/add/{idVoluntario}/{idEmergencia}")
+    public void crearRanking(@PathVariable Long idVoluntario,
+                             @PathVariable Long idEmergencia) {
+        List<?> emergenciaZona = rankingService.emergenciaZona(idEmergencia);
+        Object[] emergencia = (Object[]) emergenciaZona.get(0);
+        String text = rankingService.bytesToString((byte[]) emergencia[2]);
+        assert text != null;
+
+        double[] latLong = rankingService.wkbToLatLong(rankingService.hexStringToByteArray(text));
+        Double latitudEmergencia = latLong[1];
+        Double longitudEmergencia = latLong[0];
+
+        List<?> voluntarioZona = rankingService.voluntarioZona(idVoluntario);
+        Object[] voluntario = (Object[]) voluntarioZona.get(0);
+        String text1 = rankingService.bytesToString((byte[]) voluntario[2]);
+        assert text1 != null;
+
+        double[] latLong1 = rankingService.wkbToLatLong(rankingService.hexStringToByteArray(text1));
+        Double latitudVoluntario = latLong1[1];
+        Double longitudVoluntario = latLong1[0];
+
+        Double distancia = rankingService.distanciaEntrePuntos(latitudVoluntario, longitudVoluntario, latitudEmergencia, longitudEmergencia);
+        List<TareaEntity> tareas = tareaService.tablaTareas(idEmergencia);
+        for (TareaEntity tarea : tareas) {
+            Long idTarea = tarea.getId();
+            TareaEntity nombreTarea = tareaService.buscarTareaPorId(idTarea);
+            String tareaRanking = nombreTarea.getNombre();
+            VoluntarioEntity buscarVoluntario = voluntarioService.buscarVoluntarioPorId(idVoluntario);
+            int nivelRanking = rankingService.puntajeRanking(distancia, idVoluntario);
+            String nombreVoluntario = buscarVoluntario.getNombre();
+            String numeroDocumentoVoluntario = buscarVoluntario.getNumeroDocumento();
+            RankingEntity ranking = new RankingEntity(nivelRanking, tareaRanking, nombreVoluntario,
+                    numeroDocumentoVoluntario);
+            Long idUsuario = 1L;
+            // auditoriaService.registrarCambio(idUsuario, "Add", "añadio un ranking");
+            rankingService.insertarRanking(nivelRanking, tareaRanking, nombreVoluntario,
+                    numeroDocumentoVoluntario, idTarea,
+                    idVoluntario);
+            // Long idUsuario = metodo para obtener id de usuario ya listo, esperar a pablo
+            // auditoriaService.registrarCambio(idUsuario, "Add", "añadio un ranking");
+        }
+    }
+
+
+    /*
     @PostMapping("/add/{idVoluntario}/{idEmergencia}")
     public void crearRanking(@PathVariable Long idVoluntario,
                              @PathVariable Long idEmergencia) {
@@ -85,6 +135,7 @@ public class RankingController {
             // auditoriaService.registrarCambio(idUsuario, "Add", "añadio un ranking");
         }
     }
+     */
 
     @DeleteMapping("/delete/{idRanking}")
     public void eliminar(@PathVariable Long idRanking) {

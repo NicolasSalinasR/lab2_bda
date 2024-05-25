@@ -39,6 +39,7 @@ public class VoluntarioController {
         return voluntarioService.listaVoluntario();
     }
 
+/*
     @GetMapping("/palabra/{palabraClave}")
     public ResponseEntity<List<VoluntarioEntity>> buscarVoluntarios(@PathVariable String palabraClave) {
         List<VoluntarioEntity> voluntariosEncontrados = voluntarioService.listaFiltro(palabraClave);
@@ -47,19 +48,21 @@ public class VoluntarioController {
         }
         return ResponseEntity.ok(voluntariosEncontrados);
     }
+ */
 
     @GetMapping("/{idVoluntario}")
-    public ResponseEntity<List<?>> buscarId(@PathVariable Long idVoluntario) {
+    public ResponseEntity<VoluntarioEntity> buscarId(@PathVariable Long idVoluntario) {
         if (idVoluntario == null) {
             return ResponseEntity.badRequest().build();
         }
-        List<?> idVoluntariosEncontrados = voluntarioService.buscarVoluntarioPorId(idVoluntario);
-        if (idVoluntariosEncontrados.isEmpty()) {
+        VoluntarioEntity idVoluntariosEncontrados = voluntarioService.buscarVoluntarioPorId(idVoluntario);
+        if (idVoluntariosEncontrados == null) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(idVoluntariosEncontrados);
     }
 
+/*
     @GetMapping("/zona")
     public String zona(@RequestBody Map<String, String> body){
         Long idVoluntario = Long.parseLong(body.get("idVoluntario"));
@@ -74,8 +77,10 @@ public class VoluntarioController {
         // Imprime las coordenadas x e y
         return("Latitud: " + latLong[1] + ", Longitud: " + latLong[0]);
     }
+ */
 
     //lista de 20 voluntarios mas cercanos a la emergencia
+/*
     @GetMapping("/voluntariosMasCercanos/{latitud}{longitud}")
     public void voluntariosMasCercanos(@PathVariable Double latitud, @PathVariable Double longitud){
         List<?> voluntarios = voluntarioService.tablaCompleta();
@@ -165,6 +170,7 @@ public class VoluntarioController {
         return data;
     }
 
+ */
     @PostMapping("/add")
     public void crearVoluntario(@RequestBody Map<String, String> body) {
         String nombreVoluntario = body.get("nombreVoluntario");

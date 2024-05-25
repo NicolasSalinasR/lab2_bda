@@ -33,4 +33,8 @@ public class TareaService {
     public List<TareaEntity> listaTarea() {
         return tareaRepository.listaTarea();
     }
+
+    public List<TareaEntity> tablaTareas(Long id){
+        return tareaRepository.tablaTareas(id);
+    }
 }
