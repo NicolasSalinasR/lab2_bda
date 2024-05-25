@@ -10,7 +10,7 @@ public class EstadoTareaService {
     @Autowired
     private EstadoTareaRepository estadoTareaRepository;
 
-    public void insertarEstadoTarea(Long idTarea, String estadoTarea) {
+    public void insertarEstadoTarea(Long idTarea, boolean estadoTarea) {
         estadoTareaRepository.insertarEstadoTarea(idTarea, estadoTarea);
     }
 

@@ -2,6 +2,11 @@
 <project version="4">
   <component name="RemoteRepositoriesConfiguration">
     <remote-repository>
+      <option name="id" value="hibernate-spatial-repo" />
+      <option name="name" value="Hibernate Spatial Repository" />
+      <option name="url" value="https://sourceforge.net/projects/hibernate/files/hibernate-spatial/" />
+    </remote-repository>
+    <remote-repository>
       <option name="id" value="central" />
       <option name="name" value="Central Repository" />
       <option name="url" value="https://repo.maven.apache.org/maven2" />
