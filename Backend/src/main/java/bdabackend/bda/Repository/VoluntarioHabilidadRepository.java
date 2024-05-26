@@ -31,7 +31,6 @@ public interface VoluntarioHabilidadRepository extends JpaRepository<VoluntarioH
     @Query("DELETE FROM VoluntarioHabilidadEntity v WHERE v.id = :id")
     public void eliminarVoluntarioHabilidadPorId(@Param("id") Long id);
 
-    @Query("SELECT v FROM InstitucionEntity v")
+    @Query("SELECT v FROM VoluntarioHabilidadEntity v")
     public List<VoluntarioHabilidadEntity> listaVoluntarioHabilidad();
-
 }

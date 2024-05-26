@@ -1,15 +1,9 @@
 package bdabackend.bda.Controller;
 
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
-
+import org.springframework.web.bind.annotation.*;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import bdabackend.bda.Entity.AuthenticationResponse;
 import bdabackend.bda.Entity.CoordinadorEntity;
 import bdabackend.bda.Entity.LoginRequest;
@@ -55,4 +49,11 @@ public class CoordinadorController {
         return coordinador;
     }
 
+    @DeleteMapping("/delete/{id}")
+    public void eliminar(@PathVariable Long id) {
+        //Long idUsuario = 2L;//metodo para obtener id de usuario ya listo, esperar a
+        // pablo
+        //auditoriaService.registrarCambio(idUsuario, "Delete", "elimino unvoluntario");
+        coordinadorService.eliminarCoordinadorPorId(id);
+    }
 }

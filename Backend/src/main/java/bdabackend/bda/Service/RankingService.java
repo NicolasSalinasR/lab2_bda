@@ -1,5 +1,6 @@
 package bdabackend.bda.Service;
 
+import bdabackend.bda.Entity.TareaEntity;
 import bdabackend.bda.Entity.VoluntarioEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.geo.Point;
@@ -35,12 +36,16 @@ public class RankingService {
         rankingRepository.eliminarRankingPorId(id);
     }
 
-    public RankingEntity buscarRankingPorId(Long id) {
+    public List<?> buscarRankingPorId(Long id) {
         return rankingRepository.buscarRankingPorId(id);
     }
 
-    public List<RankingEntity> listaRanking() {
+    public List<?> listaRanking() {
         return rankingRepository.listaRanking();
+    }
+
+    public List<RankingEntity> listaFiltro(String palabraClave) {
+        return rankingRepository.findAll(palabraClave);
     }
 
     public List<?> emergenciaZona(Long id){
@@ -50,6 +55,7 @@ public class RankingService {
     public List<?> voluntarioZona(Long id){
         return rankingRepository.sacarZonaVoluntario(id);
     }
+
 
     public double distanciaEntrePuntos(double latitudPunto1, double longitudPunto1, double latitudPunto2, double longitudPunto2) {
         // Radio de la Tierra en metros
@@ -104,10 +110,10 @@ public class RankingService {
         return data;
     }
 
+
     public int puntajeRanking(Double distancia, Long idVoluntario) {
         int contador = 0;
-        VoluntarioEntity voluntarioEntity = voluntarioService.buscarVoluntarioPorId(idVoluntario);
-        String equipo = voluntarioEntity.getEquipamiento();
+        String equipo = voluntarioService.eqipamientov(idVoluntario);
         String[] elementos = equipo.split("\s,\s");
         for (String elemento : elementos) {
             List<String> resultadoFuncion = rankingRepository.matchEquipo(elemento);

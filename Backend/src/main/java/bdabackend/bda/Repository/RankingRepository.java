@@ -1,5 +1,6 @@
 package bdabackend.bda.Repository;
 
+import bdabackend.bda.Entity.TareaEntity;
 import org.springframework.data.geo.Point;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -40,11 +41,17 @@ public interface RankingRepository extends JpaRepository<RankingEntity, Long> {
             @Param("numeroDocumentoVoluntario") String numeroDocumentoVoluntario);
 
     // Leer
-    @Query("SELECT v FROM RankingEntity v WHERE v.id = ?1")
-    public RankingEntity buscarRankingPorId(Long id);
+    @Query(value = "SELECT * FROM ranking WHERE ranking.id = ?1", nativeQuery = true)
+    public List<?> buscarRankingPorId(@Param("v") Long id);
 
-    @Query("SELECT v FROM RankingEntity v")
-    public List<RankingEntity> listaRanking();
+    @Query("SELECT palabra FROM RankingEntity palabra WHERE"
+            + " CONCAT(palabra.nivel, palabra.numeroDocumentoVoluntario, " +
+            "palabra.nombreVoluntario, palabra.tareaRanking)"
+            + " LIKE %?1%")
+    public List<RankingEntity> findAll(@Param("palabra") String palabraClave);
+
+    @Query(value = "SELECT * FROM ranking", nativeQuery = true)
+    public List<?> listaRanking();
 
     // Delete
     @Transactional
@@ -52,15 +59,15 @@ public interface RankingRepository extends JpaRepository<RankingEntity, Long> {
     @Query("DELETE FROM RankingEntity v WHERE v.id = :id")
     public void eliminarRankingPorId(@Param("id") Long id);
 
-    @Query("SELECT v.zonaEmergencia FROM EmergenciaEntity v WHERE v.id = :id")
-    public List<?> sacarZonaEmergencia(@Param("id") Long id);
+    @Query(value = "SELECT * FROM emergencia WHERE emergencia.id =?1", nativeQuery = true)
+    public List<?> sacarZonaEmergencia(@Param("v") Long id);
 
-    @Query("SELECT v.zonaVivienda FROM VoluntarioEntity v WHERE v.id = :id")
-    public List<?> sacarZonaVoluntario(@Param("id") Long id);
+    @Query(value = "SELECT * FROM voluntario WHERE voluntario.id =?1", nativeQuery = true)
+    public List<?> sacarZonaVoluntario(@Param("v") Long id);
 
     @Query("SELECT v.habilidadRequerida FROM TareaHabilidadEntity v WHERE v.habilidadRequerida LIKE CONCAT('%', :equipo, '%')")
     public List<String> matchEquipo(@Param("equipo") String equipo);
 
-    @Query("SELECT COUNT(v) FROM VoluntarioHabilidadEntity v WHERE v.voluntario.idVoluntario=:id")
+    @Query("SELECT COUNT(v) FROM VoluntarioHabilidadEntity v WHERE v.voluntario.id=:id")
     public int matchHabilidad(@Param("id") Long id);
 }

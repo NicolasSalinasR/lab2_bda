@@ -1,12 +1,10 @@
 package bdabackend.bda.Controller;
 
-import bdabackend.bda.Entity.EmergenciaEntity;
 import bdabackend.bda.Entity.TareaEntity;
 import bdabackend.bda.Service.AuditoriaService;
-import bdabackend.bda.Service.EmergenciaService;
 import bdabackend.bda.Service.TareaService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.geo.Point;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,12 +17,10 @@ public class TareaController {
     @Autowired
     private TareaService tareaService;
     @Autowired
-    private EmergenciaService emergenciaService;
-    @Autowired
     private AuditoriaService auditoriaService;
 
     @GetMapping("/{id}")
-    public TareaEntity getTareaById(@PathVariable Long id) {
+    public List<?> getTareaById(@PathVariable Long id) {
         return tareaService.buscarTareaPorId(id);
     }
 
@@ -33,6 +29,15 @@ public class TareaController {
         return tareaService.listaTarea();
     }
 
+    @GetMapping("/palabra/{palabraClave}")
+    public ResponseEntity<List<TareaEntity>> buscarVoluntarios(@PathVariable String palabraClave) {
+        List<TareaEntity> tareaEntities = tareaService.listaFiltro(palabraClave);
+        if (tareaEntities.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(tareaEntities);
+    }
+/*
     @GetMapping("/zona")
     public String zona(@RequestBody Map<String, String> body) {
         Long idTarea = Long.parseLong(body.get("idTarea"));
@@ -49,6 +54,12 @@ public class TareaController {
         // return ("Latitud: " + latLong[1] + ", Longitud: " + latLong[0]);
         return "hola";
     }
+ */
+
+    @GetMapping("/tareaRegion/{nombreRegion}")
+    public List<?> tareaPorRegion(@PathVariable String nombreRegion) {
+        return tareaService.tareasPorRegion(nombreRegion);
+    }
 
     @GetMapping("/nombre/{nombreTarea}")
     public List<TareaEntity> getRankingTarea(@PathVariable String nombreTarea) {
@@ -56,22 +67,30 @@ public class TareaController {
     }
 
     @PostMapping("/add")
-    public TareaEntity addTarea(@RequestBody Map<String, String> body) {
+    public void addTarea(@RequestBody Map<String, String> body) {
         String nombreTarea = body.get("nombreTarea");
         String descripcionTarea = body.get("descripcionTarea");
         String tipoTarea = body.get("tipoTarea");
         Long emergencia = Long.parseLong(body.get("emergencia"));
-        Point zonaTarea = new Point(Double.parseDouble(body.get("latitud")), Double.parseDouble(body.get("longitud")));
-        EmergenciaEntity emergencia1 = emergenciaService.buscarEmergenciaPorId(emergencia);
-        TareaEntity tarea = new TareaEntity(nombreTarea, descripcionTarea, tipoTarea, zonaTarea);
+        Double latitud = Double.parseDouble(body.get("latitud"));
+        Double longitud = Double.parseDouble(body.get("longitud"));
+        //EmergenciaEntity emergencia1 = emergenciaService.buscarEmergenciaPorId(emergencia);
+        //TareaEntity tarea = new TareaEntity(nombreTarea, descripcionTarea, tipoTarea, zonaTarea);
         Long idUsuario = 1L;
-        // auditoriaService.registrarCambio(idUsuario, "Add", "añadio una tarea");
-        tareaService.insertarTarea(nombreTarea, descripcionTarea, tipoTarea, zonaTarea, emergencia);
-
+        //// auditoriaService.registrarCambio(idUsuario, "Add", "añadio una tarea");
+        tareaService.crearTarea(nombreTarea, descripcionTarea, tipoTarea, latitud, longitud, emergencia);
         // Long idUsuario = //metodo para obtener id de usuario ya listo, esperar a
         // pablo
         // auditoriaService.registrarCambio(idUsuario, "Add", "añadio una tarea");
-        return tarea;
+        //return tarea;
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public void eliminar(@PathVariable Long id) {
+        //Long idUsuario = 2L;//metodo para obtener id de usuario ya listo, esperar a
+        // pablo
+        //auditoriaService.registrarCambio(idUsuario, "Delete", "elimino unvoluntario");
+        tareaService.eliminarTareaPorId(id);
     }
 
     @DeleteMapping("/delete/{id}")

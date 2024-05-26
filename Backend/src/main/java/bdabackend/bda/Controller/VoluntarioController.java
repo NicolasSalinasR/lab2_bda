@@ -40,6 +40,44 @@ public class VoluntarioController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @GetMapping("/all")
+    public List<?> tabla() {
+        return voluntarioService.listaVoluntario();
+    }
+
+
+    @GetMapping("/palabra/{palabraClave}")
+    public ResponseEntity<List<VoluntarioEntity>> buscarVoluntarios(@PathVariable String palabraClave) {
+        List<VoluntarioEntity> voluntariosEncontrados = voluntarioService.listaFiltro(palabraClave);
+        if (voluntariosEncontrados.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(voluntariosEncontrados);
+    }
+    @GetMapping("/{idVoluntario}")
+    public List<?> buscarId(@PathVariable Long idVoluntario) {
+        return voluntarioService.listaVoluntarioId(idVoluntario);
+    }
+
+    @DeleteMapping("/delete/{idVoluntario}")
+    public void eliminar(@PathVariable Long idVoluntario) {
+        voluntarioService.eliminarVoluntarioPorId(idVoluntario);
+    }
+    @PostMapping("/add")
+    public void crearVoluntario(@RequestBody Map<String, String> body) {
+        String nombreVoluntario = body.get("nombreVoluntario");
+        String contrasenaVoluntario = body.get("contrasenaVoluntario");
+        String correoVoluntario = body.get("correoVoluntario");
+        String numeroDocumentoVoluntario = body.get("numeroDocumentoVoluntario");
+        String equipamientoVoluntario = body.get("equipamientoVoluntario");
+        Double latitud = Double.parseDouble(body.get("latitud"));
+        Double longitud = Double.parseDouble(body.get("longitud"));
+        // Llama al servicio para crear un nuevo voluntario
+        voluntarioService.crearVoluntario(nombreVoluntario, correoVoluntario, numeroDocumentoVoluntario,
+                latitud, longitud, passwordEncoder.encode(contrasenaVoluntario), equipamientoVoluntario);
+    }
+
+
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> login(@RequestBody Map<String, String> body) {
         // Se recibe el correo y la contraseña
