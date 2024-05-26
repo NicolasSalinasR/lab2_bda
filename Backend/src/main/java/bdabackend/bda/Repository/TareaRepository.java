@@ -67,5 +67,9 @@ public interface TareaRepository extends JpaRepository<TareaEntity, Long> {
 
         @Query("SELECT v.nombre FROM TareaEntity v WHERE v.id = :id")
         public String nombre (@Param("id") Long id);
+
+        @Query(value = "SELECT *  FROM tarea JOIN regiones_chile ON " +
+                "ST_Contains(regiones_chile.geometria, tarea.zona) WHERE regiones_chile.nombre =?1", nativeQuery = true)
+        public List<?> obtenerTareasPorRegion(@Param("v") String nombreRegion);
 }
 

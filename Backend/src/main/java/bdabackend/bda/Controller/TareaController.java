@@ -56,6 +56,11 @@ public class TareaController {
     }
  */
 
+    @GetMapping("/tareaRegion/{nombreRegion}")
+    public List<?> tareaPorRegion(@PathVariable String nombreRegion) {
+        return tareaService.tareasPorRegion(nombreRegion);
+    }
+
     @GetMapping("/nombre/{nombreTarea}")
     public List<TareaEntity> getRankingTarea(@PathVariable String nombreTarea) {
         return tareaService.getRankingTarea(nombreTarea);

@@ -73,4 +73,8 @@ public class TareaService {
     public String nombre(Long id){
         return tareaRepository.nombre(id);
     }
+
+    public List<?> tareasPorRegion(String nombreRegion){
+        return tareaRepository.obtenerTareasPorRegion(nombreRegion);
+    }
 }
