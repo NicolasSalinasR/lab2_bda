@@ -1,9 +1,7 @@
 package bdabackend.bda.Controller;
 
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import bdabackend.bda.Entity.AuthenticationResponse;
@@ -50,6 +48,7 @@ public class CoordinadorController {
         coordinadorService.insertarCoordinador(coordinador);
         return coordinador;
     }
+
     @DeleteMapping("/delete/{id}")
     public void eliminar(@PathVariable Long id) {
         //Long idUsuario = 2L;//metodo para obtener id de usuario ya listo, esperar a

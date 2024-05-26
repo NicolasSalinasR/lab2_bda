@@ -36,7 +36,7 @@ public interface VoluntarioRepository extends JpaRepository<VoluntarioEntity, Lo
         @Query("SELECT v FROM VoluntarioEntity v WHERE v.correo = ?1")
         public VoluntarioEntity buscarPorCorreo(String correo);
 
-        @Query("SELECT v FROM VoluntarioEntity v")
+        @Query(value = "SELECT * FROM voluntario", nativeQuery = true)
         public List<?> listaVoluntario();
 
         // Delete
@@ -54,6 +54,6 @@ public interface VoluntarioRepository extends JpaRepository<VoluntarioEntity, Lo
         @Query("SELECT v.equipamiento FROM VoluntarioEntity v WHERE v.id = :id")
         public String equipamiento (@Param("id") Long id);
 
-        @Query("SELECT v FROM VoluntarioEntity v WHERE v.id = ?1")
-        public List<?> listaVoluntarioId(@Param("id") Long id);
+        @Query(value = "SELECT * FROM voluntario WHERE voluntario.id = ?1", nativeQuery = true)
+        public List<?> listaVoluntarioId(@Param("v") Long id);
 }

@@ -32,11 +32,11 @@ public interface TareaRepository extends JpaRepository<TareaEntity, Long> {
                         @Param("tipo") String tipo, @Param("zona") Point zona);
 
         // Leer
-        @Query("SELECT v FROM TareaEntity v WHERE v.id = ?1")
-        public List<?> buscarTareaPorId(Long id);
+        @Query(value = "SELECT * FROM tarea WHERE tarea.id = ?1", nativeQuery = true)
+        public List<?> buscarTareaPorId(@Param("v") Long id);
 
-        @Query("SELECT v FROM TareaEntity v")
-        public List<TareaEntity> listaTarea();
+        @Query(value = "SELECT * FROM tarea", nativeQuery = true)
+        public List<?> listaTarea();
 
         // Delete
         @Transactional

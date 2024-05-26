@@ -1,13 +1,9 @@
 package bdabackend.bda.Controller;
 
-import bdabackend.bda.Entity.EmergenciaEntity;
 import bdabackend.bda.Entity.TareaEntity;
-import bdabackend.bda.Entity.VoluntarioEntity;
 import bdabackend.bda.Service.AuditoriaService;
-import bdabackend.bda.Service.EmergenciaService;
 import bdabackend.bda.Service.TareaService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.geo.Point;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -78,7 +74,6 @@ public class TareaController {
         Long idUsuario = 1L;
         //// auditoriaService.registrarCambio(idUsuario, "Add", "añadio una tarea");
         tareaService.crearTarea(nombreTarea, descripcionTarea, tipoTarea, latitud, longitud, emergencia);
-
         // Long idUsuario = //metodo para obtener id de usuario ya listo, esperar a
         // pablo
         // auditoriaService.registrarCambio(idUsuario, "Add", "añadio una tarea");

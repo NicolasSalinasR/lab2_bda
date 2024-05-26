@@ -7,11 +7,9 @@ import bdabackend.bda.Service.AuditoriaService;
 import bdabackend.bda.Service.AuthService;
 import bdabackend.bda.Service.VoluntarioService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.geo.Point;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Map;
 
@@ -168,8 +166,6 @@ public class VoluntarioController {
         String equipamientoVoluntario = body.get("equipamientoVoluntario");
         Double latitud = Double.parseDouble(body.get("latitud"));
         Double longitud = Double.parseDouble(body.get("longitud"));
-
-
         // Llama al servicio para crear un nuevo voluntario
         voluntarioService.crearVoluntario(nombreVoluntario, correoVoluntario, numeroDocumentoVoluntario,
                 latitud, longitud, passwordEncoder.encode(contrasenaVoluntario), equipamientoVoluntario);
@@ -191,7 +187,6 @@ public class VoluntarioController {
         // Si no son correctos se devuelve un error
         String correoVoluntario = body.get("correoVoluntario");
         String contrasenaVoluntario = body.get("contrasenaVoluntario");
-
         LoginRequest loginRequest = new LoginRequest(correoVoluntario, contrasenaVoluntario);
         return ResponseEntity.ok(authService.login(loginRequest));
 

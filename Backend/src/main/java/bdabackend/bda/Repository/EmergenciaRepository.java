@@ -26,10 +26,10 @@ public interface EmergenciaRepository extends JpaRepository<EmergenciaEntity, Lo
             @Param("institucion") Long institucion);
 
     // Leer
-    @Query("SELECT v FROM EmergenciaEntity v WHERE v.id = ?1")
-    public List<?> buscarEmergenciaPorId(Long id);
+    @Query(value = "SELECT * FROM emergencia WHERE emergencia.id = ?1", nativeQuery = true)
+    public List<?> buscarEmergenciaPorId(@Param("v") Long id);
 
-    @Query("SELECT v FROM EmergenciaEntity v")
+    @Query(value = "SELECT * FROM emergencia", nativeQuery = true)
     public List<?> listaEmergencia();
 
     @Query("SELECT palabra FROM EmergenciaEntity palabra WHERE"

@@ -41,8 +41,8 @@ public interface RankingRepository extends JpaRepository<RankingEntity, Long> {
             @Param("numeroDocumentoVoluntario") String numeroDocumentoVoluntario);
 
     // Leer
-    @Query("SELECT v FROM RankingEntity v WHERE v.id = ?1")
-    public List<?> buscarRankingPorId(Long id);
+    @Query(value = "SELECT * FROM ranking WHERE ranking.id = ?1", nativeQuery = true)
+    public List<?> buscarRankingPorId(@Param("v") Long id);
 
     @Query("SELECT palabra FROM RankingEntity palabra WHERE"
             + " CONCAT(palabra.nivel, palabra.numeroDocumentoVoluntario, " +
@@ -50,7 +50,7 @@ public interface RankingRepository extends JpaRepository<RankingEntity, Long> {
             + " LIKE %?1%")
     public List<RankingEntity> findAll(@Param("palabra") String palabraClave);
 
-    @Query("SELECT v FROM RankingEntity v")
+    @Query(value = "SELECT * FROM ranking", nativeQuery = true)
     public List<?> listaRanking();
 
     // Delete

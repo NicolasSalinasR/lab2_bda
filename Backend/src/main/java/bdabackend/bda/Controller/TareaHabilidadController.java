@@ -1,18 +1,11 @@
 package bdabackend.bda.Controller;
 
-import bdabackend.bda.Entity.EmergenciaEntity;
-import bdabackend.bda.Entity.EmergenciaHabilidadEntity;
-import bdabackend.bda.Entity.TareaEntity;
 import bdabackend.bda.Entity.TareaHabilidadEntity;
 import bdabackend.bda.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.geo.Point;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Map;
-
-import static ch.qos.logback.core.encoder.ByteArrayUtil.hexStringToByteArray;
 
 @RestController
 @RequestMapping("/tareaHabilidad")
@@ -38,7 +31,6 @@ public class TareaHabilidadController {
        Long idTarea = Long.parseLong(body.get("tarea"));
        Long idEmeHabilidad = Long.parseLong(body.get("emeHabilidad"));
        String habilidadRequerida = body.get("habilidadRequerida");
-
   //      TareaEntity tareas = tareaService.getTareaById(idTarea);
   //      String tareasDos = tareas.getNombreTarea();
   //      Long id = ((Long) tareasDos[0]);
@@ -46,27 +38,18 @@ public class TareaHabilidadController {
  //       String descripcion = ((String) tareasDos[2]);
  //       String tipo = ((String) tareasDos[3]);
  //       String zona = bytesToString((byte[]) tareasDos[4]);
-
  //       double[] latLong = wkbToLatLong(hexStringToByteArray(zona));
  //       double latitudVoluntario = latLong[1];
 //        double longiotudVoluntario = latLong[0];
-
        // Point zonaTarea = new Point(longiotudVoluntario, latitudVoluntario);
-
-
       //  Long idEmergencia = ((Long) tareasDos[5]);
-
       //  EmergenciaEntity emergencia = emergenciaservice.getEmergenciaById(idEmergencia);
       //  TareaEntity tareaNew = new TareaEntity(id,nombre,descripcion,tipo,emergencia, zonaTarea);
-
-
      //   EmergenciaHabilidadEntity emeHabilidadNew = emeHabilidadService.getEmeHabilidadById(idEmeHabilidad);
-
      //   TareaHabilidadEntity tareaHabilidad = new TareaHabilidadEntity(tareaNew, emeHabilidadNew, habilidadRequerida);
      //   Long idUsuario = 1L;
         //auditoriaService.registrarCambio(idUsuario, "Add", "añadio una tarea Habilidad");
         tareaHabilidadService.insertarTareaHabilidad(habilidadRequerida,idTarea, idEmeHabilidad);
-
         // Long idUsuario = //metodo para obtener id de usuario ya listo, esperar a
         // pablo
         // auditoriaService.registrarCambio(idUsuario, "Add", "añadio una tarea

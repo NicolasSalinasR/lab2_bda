@@ -1,13 +1,9 @@
 package bdabackend.bda.Controller;
 
 import bdabackend.bda.Entity.EmergenciaEntity;
-import bdabackend.bda.Entity.InstitucionEntity;
-import bdabackend.bda.Entity.TareaEntity;
 import bdabackend.bda.Service.AuditoriaService;
 import bdabackend.bda.Service.EmergenciaService;
-import bdabackend.bda.Service.InstitucionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.geo.Point;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +32,6 @@ public class EmergenciaController {
     @GetMapping("/{id}")
     public List<?> getEmergenciaById(@PathVariable Long id) {
         return emergenciaService.buscarEmergenciaPorId(id);
-
     }
 
     @GetMapping("/all")
@@ -55,15 +50,11 @@ public class EmergenciaController {
         Double longitud = Double.parseDouble(body.get("longitud"));
         int cantidadVoluntariosMinimo2 = Integer.parseInt( cantidadVoluntariosMinimo);
         int cantidadVoluntariosMaximo2 = Integer.parseInt(cantidadVoluntariosMaximo );
-
         //InstitucionEntity institucion = institucionService.buscarInstitucionPorId(idInstitucion);
-
-
         //Long idUsuario = 1L;
         //auditoriaService.registrarCambio(idUsuario, "Add", "añadio una emergencia");
         emergenciaService.crearEmergencia(tipoEmergencia, latitud, longitud, condicionFisica,
                 cantidadVoluntariosMinimo2, cantidadVoluntariosMaximo2, idInstitucion);
-
         // Long idUsuario = //metodo para obtener id de usuario ya listo, esperar a
         // pablo
         // auditoriaService.registrarCambio(idUsuario, "Add", "añadio una emergencia");
@@ -78,5 +69,4 @@ public class EmergenciaController {
         //auditoriaService.registrarCambio(idUsuario, "Delete", "elimino unvoluntario");
         emergenciaService.eliminarEmergenciaPorId(id);
     }
-    
 }

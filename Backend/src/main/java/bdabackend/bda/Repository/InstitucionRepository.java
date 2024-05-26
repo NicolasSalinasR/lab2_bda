@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 import bdabackend.bda.Entity.InstitucionEntity;
 import jakarta.transaction.Transactional;
 import org.springframework.data.repository.query.Param;
-
 import java.util.List;
 
 @Repository
@@ -19,16 +18,15 @@ public interface InstitucionRepository extends JpaRepository<InstitucionEntity, 
     public void insertarInstitucion(@Param("nombre") String nombre);
 
     // Leer
-    @Query("SELECT v FROM InstitucionEntity v WHERE v.id = ?1")
-    public InstitucionEntity buscarInstitucionPorId(Long id);
+    @Query(value = "SELECT * FROM institucion WHERE institucion.id = ?1", nativeQuery = true)
+    public List<?> buscarInstitucionPorId(@Param("v") Long id);
 
-    @Query("SELECT v FROM InstitucionEntity v")
-    public List<InstitucionEntity> listaInstitucion();
+    @Query(value = "SELECT * FROM institucion", nativeQuery = true)
+    public List<?> listaInstitucion();
 
     // Delete
     @Transactional
     @Modifying
     @Query("DELETE FROM InstitucionEntity v WHERE v.id = :id")
     public void eliminarInstitucionPorId(@Param("id") Long id);
-
 }
