@@ -2,11 +2,13 @@ package bdabackend.bda.Controller;
 
 import bdabackend.bda.Entity.EmergenciaEntity;
 import bdabackend.bda.Entity.InstitucionEntity;
+import bdabackend.bda.Entity.TareaEntity;
 import bdabackend.bda.Service.AuditoriaService;
 import bdabackend.bda.Service.EmergenciaService;
 import bdabackend.bda.Service.InstitucionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.geo.Point;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,19 +22,25 @@ public class EmergenciaController {
     private EmergenciaService emergenciaService;
 
     @Autowired
-    private InstitucionService institucionService;
-
-    @Autowired
     private AuditoriaService auditoriaService;
 
+    @GetMapping("/palabra/{palabraClave}")
+    public ResponseEntity<List<EmergenciaEntity>> buscarVoluntarios(@PathVariable String palabraClave) {
+        List<EmergenciaEntity> emergenciaEntities = emergenciaService.listaFiltro(palabraClave);
+        if (emergenciaEntities.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(emergenciaEntities);
+    }
+
     @GetMapping("/{id}")
-    public EmergenciaEntity getEmergenciaById(@PathVariable Long id) {
+    public List<?> getEmergenciaById(@PathVariable Long id) {
         return emergenciaService.buscarEmergenciaPorId(id);
 
     }
 
     @GetMapping("/all")
-    public List<EmergenciaEntity> getAllEmergencias() {
+    public List<?> getAllEmergencias() {
         return emergenciaService.listaEmergencia();
     }
 
@@ -48,10 +56,10 @@ public class EmergenciaController {
         int cantidadVoluntariosMinimo2 = Integer.parseInt( cantidadVoluntariosMinimo);
         int cantidadVoluntariosMaximo2 = Integer.parseInt(cantidadVoluntariosMaximo );
 
-        InstitucionEntity institucion = institucionService.buscarInstitucionPorId(idInstitucion);
+        //InstitucionEntity institucion = institucionService.buscarInstitucionPorId(idInstitucion);
 
 
-        Long idUsuario = 1L;
+        //Long idUsuario = 1L;
         //auditoriaService.registrarCambio(idUsuario, "Add", "añadio una emergencia");
         emergenciaService.crearEmergencia(tipoEmergencia, latitud, longitud, condicionFisica,
                 cantidadVoluntariosMinimo2, cantidadVoluntariosMaximo2, idInstitucion);
@@ -59,8 +67,16 @@ public class EmergenciaController {
         // Long idUsuario = //metodo para obtener id de usuario ya listo, esperar a
         // pablo
         // auditoriaService.registrarCambio(idUsuario, "Add", "añadio una emergencia");
-// ! Se debe cambiar al terminar el front por seguridad de que no devuelva
+        // ! Se debe cambiar al terminar el front por seguridad de que no devuelva
         // ! datos, solo debe devolver una respuesta de que se guardo correctamente
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public void eliminar(@PathVariable Long id) {
+        //Long idUsuario = 2L;//metodo para obtener id de usuario ya listo, esperar a
+        // pablo
+        //auditoriaService.registrarCambio(idUsuario, "Delete", "elimino unvoluntario");
+        emergenciaService.eliminarEmergenciaPorId(id);
     }
     
 }

@@ -2,11 +2,13 @@ package bdabackend.bda.Controller;
 
 import bdabackend.bda.Entity.EmergenciaEntity;
 import bdabackend.bda.Entity.TareaEntity;
+import bdabackend.bda.Entity.VoluntarioEntity;
 import bdabackend.bda.Service.AuditoriaService;
 import bdabackend.bda.Service.EmergenciaService;
 import bdabackend.bda.Service.TareaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.geo.Point;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,12 +21,10 @@ public class TareaController {
     @Autowired
     private TareaService tareaService;
     @Autowired
-    private EmergenciaService emergenciaService;
-    @Autowired
     private AuditoriaService auditoriaService;
 
     @GetMapping("/{id}")
-    public TareaEntity getTareaById(@PathVariable Long id) {
+    public List<?> getTareaById(@PathVariable Long id) {
         return tareaService.buscarTareaPorId(id);
     }
 
@@ -33,6 +33,15 @@ public class TareaController {
         return tareaService.listaTarea();
     }
 
+    @GetMapping("/palabra/{palabraClave}")
+    public ResponseEntity<List<TareaEntity>> buscarVoluntarios(@PathVariable String palabraClave) {
+        List<TareaEntity> tareaEntities = tareaService.listaFiltro(palabraClave);
+        if (tareaEntities.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(tareaEntities);
+    }
+/*
     @GetMapping("/zona")
     public String zona(@RequestBody Map<String, String> body) {
         Long idTarea = Long.parseLong(body.get("idTarea"));
@@ -49,6 +58,7 @@ public class TareaController {
         // return ("Latitud: " + latLong[1] + ", Longitud: " + latLong[0]);
         return "hola";
     }
+ */
 
     @GetMapping("/nombre/{nombreTarea}")
     public List<TareaEntity> getRankingTarea(@PathVariable String nombreTarea) {
@@ -73,5 +83,13 @@ public class TareaController {
         // pablo
         // auditoriaService.registrarCambio(idUsuario, "Add", "añadio una tarea");
         //return tarea;
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public void eliminar(@PathVariable Long id) {
+        //Long idUsuario = 2L;//metodo para obtener id de usuario ya listo, esperar a
+        // pablo
+        //auditoriaService.registrarCambio(idUsuario, "Delete", "elimino unvoluntario");
+        tareaService.eliminarTareaPorId(id);
     }
 }

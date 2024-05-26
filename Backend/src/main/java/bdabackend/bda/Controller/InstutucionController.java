@@ -20,9 +20,6 @@ public class InstutucionController {
     private InstitucionService institucionService;
 
     @Autowired
-    private EmergenciaService emergenciaService;
-
-    @Autowired
     private AuditoriaService auditoriaService;
 
     @GetMapping("/{id}")
@@ -45,18 +42,18 @@ public class InstutucionController {
     }
 
     @PostMapping("/add")
-    public InstitucionEntity addInstitucion(@RequestBody Map<String, String> body) {
+    public void addInstitucion(@RequestBody Map<String, String> body) {
         String nombreInstitucion = body.get("nombreInstitucion");
 
-        InstitucionEntity institucion = new InstitucionEntity(nombreInstitucion);
-        Long idUsuario = 1L;
+        //InstitucionEntity institucion = new InstitucionEntity(nombreInstitucion);
+        //Long idUsuario = 1L;
         //metodo para obtener id de usuario ya listo, esperar a
         // pablo
         //auditoriaService.registrarCambio(idUsuario, "Add", "añadio una institucion");
         institucionService.insertarInstitucion(nombreInstitucion);
 
 
-        return institucion;
+        //return institucion;
     }
 
     // @DeleteMapping("/delete/{id}")
@@ -70,5 +67,11 @@ public class InstutucionController {
     // // auditoriaService.registrarCambio(idUsuario, "Delete", "eliminio una
     // // institucion");
     // }
-
+    @DeleteMapping("/delete/{id}")
+    public void eliminar(@PathVariable Long id) {
+        //Long idUsuario = 2L;//metodo para obtener id de usuario ya listo, esperar a
+        // pablo
+        //auditoriaService.registrarCambio(idUsuario, "Delete", "elimino unvoluntario");
+        institucionService.eliminarInstitucionPorId(id);
+    }
 }

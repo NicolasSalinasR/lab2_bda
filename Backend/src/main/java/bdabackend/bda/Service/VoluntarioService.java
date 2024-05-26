@@ -23,7 +23,9 @@ public class VoluntarioService {
         voluntarioRepository.insertarVoluntario(nombre, correo, numeroDocumento, zonaVivienda, contrasena,
                 equipamiento);
     }
-
+    public List<VoluntarioEntity> listaFiltro(String palabraClave) {
+        return voluntarioRepository.findAll(palabraClave);
+    }
     public void eliminarVoluntarioPorId(Long id) {
         voluntarioRepository.eliminarVoluntarioPorId(id);
     }
@@ -36,8 +38,12 @@ public class VoluntarioService {
         return voluntarioRepository.buscarPorCorreo(correo);
     }
 
-    public List<VoluntarioEntity> listaVoluntario() {
+    public List<?> listaVoluntario() {
         return voluntarioRepository.listaVoluntario();
+    }
+
+    public List<?> listaVoluntarioId(Long id) {
+        return voluntarioRepository.listaVoluntarioId(id);
     }
 
     @Autowired

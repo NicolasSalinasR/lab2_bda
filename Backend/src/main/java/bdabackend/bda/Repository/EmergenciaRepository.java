@@ -1,5 +1,6 @@
 package bdabackend.bda.Repository;
 
+import bdabackend.bda.Entity.TareaEntity;
 import org.springframework.data.geo.Point;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -26,10 +27,16 @@ public interface EmergenciaRepository extends JpaRepository<EmergenciaEntity, Lo
 
     // Leer
     @Query("SELECT v FROM EmergenciaEntity v WHERE v.id = ?1")
-    public EmergenciaEntity buscarEmergenciaPorId(Long id);
+    public List<?> buscarEmergenciaPorId(Long id);
 
     @Query("SELECT v FROM EmergenciaEntity v")
-    public List<EmergenciaEntity> listaEmergencia();
+    public List<?> listaEmergencia();
+
+    @Query("SELECT palabra FROM EmergenciaEntity palabra WHERE"
+            + " CONCAT(palabra.tipoEmergencia, palabra.cantidadVoluntariosMax, " +
+            "palabra.cantidadVoluntariosMin, palabra.condicionFisica)"
+            + " LIKE %?1%")
+    public List<EmergenciaEntity> findAll(@Param("palabra") String palabraClave);
 
     // Delete
     @Transactional

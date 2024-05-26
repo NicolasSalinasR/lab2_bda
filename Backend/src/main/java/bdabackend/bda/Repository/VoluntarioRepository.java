@@ -27,11 +27,17 @@ public interface VoluntarioRepository extends JpaRepository<VoluntarioEntity, Lo
         @Query("SELECT v FROM VoluntarioEntity v WHERE v.id = ?1")
         public VoluntarioEntity buscarVoluntarioPorId(Long id);
 
+        @Query("SELECT palabra FROM VoluntarioEntity palabra WHERE"
+                + " CONCAT(palabra.nombre, palabra.correo, " +
+                "palabra.numeroDocumento, palabra.equipamiento)"
+                + " LIKE %?1%")
+        public List<VoluntarioEntity> findAll(@Param("palabra") String palabraClave);
+
         @Query("SELECT v FROM VoluntarioEntity v WHERE v.correo = ?1")
         public VoluntarioEntity buscarPorCorreo(String correo);
 
         @Query("SELECT v FROM VoluntarioEntity v")
-        public List<VoluntarioEntity> listaVoluntario();
+        public List<?> listaVoluntario();
 
         // Delete
         @Transactional
@@ -47,4 +53,7 @@ public interface VoluntarioRepository extends JpaRepository<VoluntarioEntity, Lo
 
         @Query("SELECT v.equipamiento FROM VoluntarioEntity v WHERE v.id = :id")
         public String equipamiento (@Param("id") Long id);
+
+        @Query("SELECT v FROM VoluntarioEntity v WHERE v.id = ?1")
+        public List<?> listaVoluntarioId(@Param("id") Long id);
 }

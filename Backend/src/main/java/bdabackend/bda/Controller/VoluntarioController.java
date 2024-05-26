@@ -30,17 +30,12 @@ public class VoluntarioController {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    @GetMapping()
-    public String conectado() {
-        return "CONECTADO";
-    }
-
     @GetMapping("/all")
     public List<?> tabla() {
         return voluntarioService.listaVoluntario();
     }
 
-/*
+
     @GetMapping("/palabra/{palabraClave}")
     public ResponseEntity<List<VoluntarioEntity>> buscarVoluntarios(@PathVariable String palabraClave) {
         List<VoluntarioEntity> voluntariosEncontrados = voluntarioService.listaFiltro(palabraClave);
@@ -49,18 +44,10 @@ public class VoluntarioController {
         }
         return ResponseEntity.ok(voluntariosEncontrados);
     }
- */
 
     @GetMapping("/{idVoluntario}")
-    public ResponseEntity<VoluntarioEntity> buscarId(@PathVariable Long idVoluntario) {
-        if (idVoluntario == null) {
-            return ResponseEntity.badRequest().build();
-        }
-        VoluntarioEntity idVoluntariosEncontrados = voluntarioService.buscarVoluntarioPorId(idVoluntario);
-        if (idVoluntariosEncontrados == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(idVoluntariosEncontrados);
+    public List<?> buscarId(@PathVariable Long idVoluntario) {
+        return voluntarioService.listaVoluntarioId(idVoluntario);
     }
 
 /*
@@ -191,12 +178,10 @@ public class VoluntarioController {
 
     @DeleteMapping("/delete/{idVoluntario}")
     public void eliminar(@PathVariable Long idVoluntario) {
-        Long idUsuario = 2L;//metodo para obtener id de usuario ya listo, esperar a
+        //Long idUsuario = 2L;//metodo para obtener id de usuario ya listo, esperar a
         // pablo
         //auditoriaService.registrarCambio(idUsuario, "Delete", "elimino unvoluntario");
         voluntarioService.eliminarVoluntarioPorId(idVoluntario);
-
-
     }
 
     @PostMapping("/login")

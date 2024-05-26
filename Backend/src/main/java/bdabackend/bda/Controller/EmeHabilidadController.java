@@ -21,12 +21,6 @@ public class EmeHabilidadController {
     @Autowired
     private EmergenciaHabilidadSevice emeHabilidadService;
     @Autowired
-    private EmergenciaService emergenciaService;
-
-    @Autowired
-    private HabilidadService habilidadService;
-
-    @Autowired
     private AuditoriaService auditoriaService;
 
     @GetMapping("/{id}")
@@ -74,6 +68,12 @@ public class EmeHabilidadController {
     // // auditoriaService.registrarCambio(idUsuario, "delete", "borro una
     // emergencia Habilidad");
     // }
-
+    @DeleteMapping("/delete/{id}")
+    public void eliminar(@PathVariable Long id) {
+        //Long idUsuario = 2L;//metodo para obtener id de usuario ya listo, esperar a
+        // pablo
+        //auditoriaService.registrarCambio(idUsuario, "Delete", "elimino unvoluntario");
+        emeHabilidadService.eliminarEmergenciaHabilidadPorId(id);
+    }
 
 }

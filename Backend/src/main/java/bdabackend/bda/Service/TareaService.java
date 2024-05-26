@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Locale;
 
 import bdabackend.bda.Entity.EmergenciaEntity;
+import bdabackend.bda.Entity.VoluntarioEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.geo.Point;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -31,11 +32,11 @@ public class TareaService {
         tareaRepository.eliminarTareaPorId(id);
     }
 
-    public TareaEntity buscarTareaPorId(Long id) {
+    public List<?> buscarTareaPorId(Long id) {
         return tareaRepository.buscarTareaPorId(id);
     }
 
-    public List<TareaEntity> listaTarea() {
+    public List<?> listaTarea() {
         return tareaRepository.listaTarea();
     }
 
@@ -46,7 +47,9 @@ public class TareaService {
     public List<TareaEntity> getRankingTarea(String nombreTarea) {
         return tareaRepository.listRankingTarea(nombreTarea);
     }
-
+    public List<TareaEntity> listaFiltro(String palabraClave) {
+        return tareaRepository.findAll(palabraClave);
+    }
     @Autowired
     private JdbcTemplate jdbcTemplate;
 

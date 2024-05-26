@@ -21,8 +21,6 @@ public class EstadoTareaController {
     private EstadoTareaService estadoTareaService;
     @Autowired
     private AuditoriaService auditoriaService;
-    @Autowired
-    private TareaService tareaService;
 
     @GetMapping("/{id}")
     public EstadoTareaEntity getEstadoTareaById(@PathVariable Long id) {
@@ -49,16 +47,17 @@ public class EstadoTareaController {
   //  }
 
     @PostMapping("/add")
-    public EstadoTareaEntity addEstadoTarea(@RequestBody Map<String, String> body) {
+    public void addEstadoTarea(@RequestBody Map<String, String> body) {
         Long idTarea = Long.parseLong(body.get("tarea"));
         Boolean estadoTarea = Boolean.parseBoolean(body.get("estadoTarea"));
-        TareaEntity tareaNew = tareaService.buscarTareaPorId(idTarea);
+        //TareaEntity tareaNew = tareaService.buscarTareaPorId(idTarea);
 
-        EstadoTareaEntity estadoTareaNew = new EstadoTareaEntity(estadoTarea, tareaNew);
+        //EstadoTareaEntity estadoTareaNew = new EstadoTareaEntity(estadoTarea, tareaNew);
         //Long idUsuario = 1L;
         //auditoriaService.registrarCambio(idUsuario, "Add", "añadio un estado tarea");
         estadoTareaService.insertarEstadoTarea(idTarea,estadoTarea);
-        return estadoTareaNew;
+        //return estadoTareaNew;
+        //
 
         // Long idUsuario = //metodo para obtener id de usuario ya listo, esperar a
         // pablo
@@ -67,7 +66,7 @@ public class EstadoTareaController {
 
     @DeleteMapping("/delete/{id}")
     public void Eliminar(@PathVariable Long id) {
-        Long idUsuario = 1L;//metodo para obtener id de usuario ya listo, esperar a
+        //Long idUsuario = 1L;//metodo para obtener id de usuario ya listo, esperar a
         //auditoriaService.registrarCambio(idUsuario, "delete", "elimino un estadotarea");
         estadoTareaService.eliminarEstadoTareaPorId(id);
         // Long idUsuario = //metodo para obtener id de usuario ya listo, esperar a

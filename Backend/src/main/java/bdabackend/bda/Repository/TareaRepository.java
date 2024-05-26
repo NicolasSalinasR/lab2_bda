@@ -1,5 +1,6 @@
 package bdabackend.bda.Repository;
 
+import bdabackend.bda.Entity.VoluntarioEntity;
 import org.springframework.data.geo.Point;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -32,7 +33,7 @@ public interface TareaRepository extends JpaRepository<TareaEntity, Long> {
 
         // Leer
         @Query("SELECT v FROM TareaEntity v WHERE v.id = ?1")
-        public TareaEntity buscarTareaPorId(Long id);
+        public List<?> buscarTareaPorId(Long id);
 
         @Query("SELECT v FROM TareaEntity v")
         public List<TareaEntity> listaTarea();
@@ -45,6 +46,13 @@ public interface TareaRepository extends JpaRepository<TareaEntity, Long> {
 
         @Query("SELECT v FROM TareaEntity v WHERE v.emergencia = :id")
         public List<TareaEntity> tablaTareas(@Param("id") Long id);
+
+        @Query("SELECT palabra FROM TareaEntity palabra WHERE"
+                + " CONCAT(palabra.nombre, palabra.descripcion, " +
+                "palabra.tipo)"
+                + " LIKE %?1%")
+        public List<TareaEntity> findAll(@Param("palabra") String palabraClave);
+
 
         @Query("SELECT t.nombre, v.nombre, r.nivel " +
                 "FROM VoluntarioEntity v, TareaEntity t, RankingEntity r " +

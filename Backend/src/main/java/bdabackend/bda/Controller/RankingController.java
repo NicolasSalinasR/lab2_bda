@@ -31,10 +31,13 @@ public class RankingController {
     @Autowired
     private AuditoriaService auditoriaService;
 
-
-    @GetMapping("/all")
-    public List<RankingEntity> tabla() {
-        return rankingService.listaRanking();
+    @GetMapping("/palabra/{palabraClave}")
+    public ResponseEntity<List<RankingEntity>> buscarVoluntarios(@PathVariable String palabraClave) {
+        List<RankingEntity> rankingEntities = rankingService.listaFiltro(palabraClave);
+        if (rankingEntities.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(rankingEntities);
     }
 
 /*
@@ -48,25 +51,16 @@ public class RankingController {
     }
  */
 
-    @GetMapping("/listaRanking")
-    public List<RankingEntity> listaRanking() {
+    @GetMapping("/{id}")
+    public List<?> getRankingById(@PathVariable Long id) {
+        return rankingService.buscarRankingPorId(id);
+    }
+
+    @GetMapping("/all")
+    public List<?> getAllRankings() {
         return rankingService.listaRanking();
     }
 
-    @GetMapping("/{idRanking}")
-    public ResponseEntity<RankingEntity> buscarId(@PathVariable Long idRanking) {
-        if (idRanking == null) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        RankingEntity rankingEncontrado = rankingService.buscarRankingPorId(idRanking);
-
-        if (rankingEncontrado == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok(rankingEncontrado);
-    }
     @PostMapping("/add")
     public void crearRanking(@RequestBody Map<String, String> body){
         Long idVoluntario = Long.parseLong(body.get("idVoluntario"));
@@ -75,23 +69,23 @@ public class RankingController {
         List<?> emergenciaZona = rankingService.emergenciaZona(idEmergencia);
 
         Object[] emergencia = (Object[]) emergenciaZona.get(0);
-        String text = bytesToString((byte[]) emergencia[5]);
+        String text = rankingService.bytesToString((byte[]) emergencia[5]);
         assert text != null;
 
-        double[] latLong = wkbToLatLong(hexStringToByteArray(text));
+        double[] latLong = rankingService.wkbToLatLong(rankingService.hexStringToByteArray(text));
         double latitudEmergencia = latLong[1];
         double longitudEmergencia = latLong[0];
 
         List<?> voluntarioZona = rankingService.voluntarioZona(idVoluntario);
         Object[] voluntario = (Object[]) voluntarioZona.get(0);
-        String text1 = bytesToString((byte[]) voluntario[6]);
+        String text1 = rankingService.bytesToString((byte[]) voluntario[6]);
         assert text1 != null;
 
-        double[] latLong1 = wkbToLatLong(hexStringToByteArray(text1));
+        double[] latLong1 = rankingService.wkbToLatLong(rankingService.hexStringToByteArray(text1));
         double latitudVoluntario = latLong1[1];
         double longitudVoluntario = latLong1[0];
 
-        double distancia = distanciaEntrePuntos(latitudVoluntario, longitudVoluntario, latitudEmergencia, longitudEmergencia);
+        double distancia = rankingService.distanciaEntrePuntos(latitudVoluntario, longitudVoluntario, latitudEmergencia, longitudEmergencia);
         List<?> tareas = tareaService.tareaEmerg(idEmergencia);
         for (Object tarea : tareas) {
             Object[] tarea1 = (Object[]) tarea;
@@ -112,6 +106,7 @@ public class RankingController {
         }
     }
 
+/*
     private static double distanciaEntrePuntos(double latitudPunto1, double longitudPunto1, double latitudPunto2, double longitudPunto2) {
         // Radio de la Tierra en metros
         final double radioTierra = 6371000;
@@ -163,6 +158,7 @@ public class RankingController {
         }
         return data;
     }
+ */
     /*
     @PostMapping("/add/{idVoluntario}/{idEmergencia}")
     public void crearRanking(@PathVariable Long idVoluntario,
@@ -192,8 +188,8 @@ public class RankingController {
 
     @DeleteMapping("/delete/{idRanking}")
     public void eliminar(@PathVariable Long idRanking) {
-        RankingEntity rankingEntity = rankingService.buscarRankingPorId(idRanking);
-        Long idUsuario = 1L;// metodo para obtener id de usuario ya listo, esperar a
+        //RankingEntity rankingEntity = rankingService.buscarRankingPorId(idRanking);
+        //Long idUsuario = 1L;// metodo para obtener id de usuario ya listo, esperar a
         // pablo
         // auditoriaService.registrarCambio(idUsuario, "Delete", "elimino un ranking");
         rankingService.eliminarRankingPorId(idRanking);

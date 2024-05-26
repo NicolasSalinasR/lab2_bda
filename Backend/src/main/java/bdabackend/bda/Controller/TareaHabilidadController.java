@@ -21,15 +21,7 @@ public class TareaHabilidadController {
     @Autowired
     private TareaHabilidadService tareaHabilidadService;
     @Autowired
-    private TareaService tareaService;
-    @Autowired
-    private EmergenciaHabilidadSevice emeHabilidadService;
-
-    @Autowired
     private AuditoriaService auditoriaService;
-
-    @Autowired
-    private EmergenciaService emergenciaservice;
 
     @GetMapping("/{id}")
     public TareaHabilidadEntity getTareaHabilidadById(@PathVariable Long id) {
@@ -44,11 +36,8 @@ public class TareaHabilidadController {
     @PostMapping("/add")
     public void addTareaHabilidad(@RequestBody Map<String, String> body) {
        Long idTarea = Long.parseLong(body.get("tarea"));
-
-
-        Long idEmeHabilidad = Long.parseLong(body.get("emeHabilidad"));
-
-        String habilidadRequerida = body.get("habilidadRequerida");
+       Long idEmeHabilidad = Long.parseLong(body.get("emeHabilidad"));
+       String habilidadRequerida = body.get("habilidadRequerida");
 
   //      TareaEntity tareas = tareaService.getTareaById(idTarea);
   //      String tareasDos = tareas.getNombreTarea();
@@ -82,7 +71,13 @@ public class TareaHabilidadController {
         // pablo
         // auditoriaService.registrarCambio(idUsuario, "Add", "añadio una tarea
         // Habilidad");
+    }
 
-
+    @DeleteMapping("/delete/{id}")
+    public void eliminar(@PathVariable Long id) {
+        //Long idUsuario = 2L;//metodo para obtener id de usuario ya listo, esperar a
+        // pablo
+        //auditoriaService.registrarCambio(idUsuario, "Delete", "elimino unvoluntario");
+        tareaHabilidadService.eliminarTareaHabilidadPorId(id);
     }
 }

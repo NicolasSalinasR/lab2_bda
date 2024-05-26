@@ -1,6 +1,7 @@
 package bdabackend.bda.Service;
 
 import bdabackend.bda.Entity.InstitucionEntity;
+import bdabackend.bda.Entity.TareaEntity;
 import org.springframework.data.geo.Point;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -29,11 +30,11 @@ public class EmergenciaService {
         emergenciaRepository.eliminarEmergenciaPorId(id);
     }
 
-    public EmergenciaEntity buscarEmergenciaPorId(Long id) {
+    public List<?> buscarEmergenciaPorId(Long id) {
         return emergenciaRepository.buscarEmergenciaPorId(id);
     }
 
-    public List<EmergenciaEntity> listaEmergencia() {
+    public List<?> listaEmergencia() {
         return emergenciaRepository.listaEmergencia();
     }
 
@@ -52,5 +53,9 @@ public class EmergenciaService {
                         + "id_institucion) VALUES (?, ST_GeomFromText(?),?, ?, ?, ?)", tipoEmergencia,
                 zonaViviendaWKT, condicionFisica, cantidadVolMin,
                 cantidadVolMax, institucion);
+    }
+
+    public List<EmergenciaEntity> listaFiltro(String palabraClave) {
+        return emergenciaRepository.findAll(palabraClave);
     }
 }

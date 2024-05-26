@@ -1,5 +1,6 @@
 package bdabackend.bda.Repository;
 
+import bdabackend.bda.Entity.TareaEntity;
 import org.springframework.data.geo.Point;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -41,10 +42,16 @@ public interface RankingRepository extends JpaRepository<RankingEntity, Long> {
 
     // Leer
     @Query("SELECT v FROM RankingEntity v WHERE v.id = ?1")
-    public RankingEntity buscarRankingPorId(Long id);
+    public List<?> buscarRankingPorId(Long id);
+
+    @Query("SELECT palabra FROM RankingEntity palabra WHERE"
+            + " CONCAT(palabra.nivel, palabra.numeroDocumentoVoluntario, " +
+            "palabra.nombreVoluntario, palabra.tareaRanking)"
+            + " LIKE %?1%")
+    public List<RankingEntity> findAll(@Param("palabra") String palabraClave);
 
     @Query("SELECT v FROM RankingEntity v")
-    public List<RankingEntity> listaRanking();
+    public List<?> listaRanking();
 
     // Delete
     @Transactional
