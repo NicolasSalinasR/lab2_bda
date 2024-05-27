@@ -1,9 +1,6 @@
 package bdabackend.bda.Service;
 
-import bdabackend.bda.Entity.TareaEntity;
-import bdabackend.bda.Entity.VoluntarioEntity;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
 import bdabackend.bda.Entity.RankingEntity;
 import bdabackend.bda.Repository.RankingRepository;
@@ -48,16 +45,16 @@ public class RankingService {
         return rankingRepository.findAll(palabraClave);
     }
 
-    public List<?> emergenciaZona(Long id){
+    public List<?> emergenciaZona(Long id) {
         return rankingRepository.sacarZonaEmergencia(id);
     }
 
-    public List<?> voluntarioZona(Long id){
+    public List<?> voluntarioZona(Long id) {
         return rankingRepository.sacarZonaVoluntario(id);
     }
 
-
-    public double distanciaEntrePuntos(double latitudPunto1, double longitudPunto1, double latitudPunto2, double longitudPunto2) {
+    public double distanciaEntrePuntos(double latitudPunto1, double longitudPunto1, double latitudPunto2,
+            double longitudPunto2) {
         // Radio de la Tierra en metros
 
         final double radioTierra = 6371000;
@@ -97,7 +94,7 @@ public class RankingService {
         buffer.position(9); // Saltar los primeros nueve bytes (tipo de geometría y orden de bytes)
         double longitude = buffer.getDouble(); // Coordenada X (longitud)
         double latitude = buffer.getDouble(); // Coordenada Y (latitud)
-        return new double[] {longitude, latitude};
+        return new double[] { longitude, latitude };
     }
 
     public byte[] hexStringToByteArray(String hexString) {
@@ -109,7 +106,6 @@ public class RankingService {
         }
         return data;
     }
-
 
     public int puntajeRanking(Double distancia, Long idVoluntario) {
         int contador = 0;

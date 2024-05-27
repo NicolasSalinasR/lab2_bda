@@ -1,6 +1,5 @@
 package bdabackend.bda.Service;
 
-import bdabackend.bda.Entity.InstitucionEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -37,24 +37,24 @@ public class TareaController {
         }
         return ResponseEntity.ok(tareaEntities);
     }
-/*
-    @GetMapping("/zona")
-    public String zona(@RequestBody Map<String, String> body) {
-        Long idTarea = Long.parseLong(body.get("idTarea"));
-        TareaEntity tarea = tareaService.buscarTareaPorId(idTarea);
-        // VoluntarioEntity voluntario = (VoluntarioEntity)
-        // idVoluntariosEncontrados.get(0);
-        String nombreTarea = tarea.getNombre();
-        // String text = bytesToString((byte[]) nombreTarea[6]);
-        // assert text != null;
-
-        // double[] latLong = wkbToLatLong(hexStringToByteArray(text));
-
-        // Imprime las coordenadas x e y
-        // return ("Latitud: " + latLong[1] + ", Longitud: " + latLong[0]);
-        return "hola";
-    }
- */
+    /*
+     * @GetMapping("/zona")
+     * public String zona(@RequestBody Map<String, String> body) {
+     * Long idTarea = Long.parseLong(body.get("idTarea"));
+     * TareaEntity tarea = tareaService.buscarTareaPorId(idTarea);
+     * // VoluntarioEntity voluntario = (VoluntarioEntity)
+     * // idVoluntariosEncontrados.get(0);
+     * String nombreTarea = tarea.getNombre();
+     * // String text = bytesToString((byte[]) nombreTarea[6]);
+     * // assert text != null;
+     * 
+     * // double[] latLong = wkbToLatLong(hexStringToByteArray(text));
+     * 
+     * // Imprime las coordenadas x e y
+     * // return ("Latitud: " + latLong[1] + ", Longitud: " + latLong[0]);
+     * return "hola";
+     * }
+     */
 
     @GetMapping("/tareaRegion/{nombreRegion}")
     public List<?> tareaPorRegion(@PathVariable String nombreRegion) {
@@ -74,27 +74,25 @@ public class TareaController {
         Long emergencia = Long.parseLong(body.get("emergencia"));
         Double latitud = Double.parseDouble(body.get("latitud"));
         Double longitud = Double.parseDouble(body.get("longitud"));
-        //EmergenciaEntity emergencia1 = emergenciaService.buscarEmergenciaPorId(emergencia);
-        //TareaEntity tarea = new TareaEntity(nombreTarea, descripcionTarea, tipoTarea, zonaTarea);
+        // EmergenciaEntity emergencia1 =
+        // emergenciaService.buscarEmergenciaPorId(emergencia);
+        // TareaEntity tarea = new TareaEntity(nombreTarea, descripcionTarea, tipoTarea,
+        // zonaTarea);
         Long idUsuario = 1L;
         //// auditoriaService.registrarCambio(idUsuario, "Add", "añadio una tarea");
         tareaService.crearTarea(nombreTarea, descripcionTarea, tipoTarea, latitud, longitud, emergencia);
         // Long idUsuario = //metodo para obtener id de usuario ya listo, esperar a
         // pablo
         // auditoriaService.registrarCambio(idUsuario, "Add", "añadio una tarea");
-        //return tarea;
+        // return tarea;
     }
 
     @DeleteMapping("/delete/{id}")
     public void eliminar(@PathVariable Long id) {
-        //Long idUsuario = 2L;//metodo para obtener id de usuario ya listo, esperar a
+        // Long idUsuario = 2L;//metodo para obtener id de usuario ya listo, esperar a
         // pablo
-        //auditoriaService.registrarCambio(idUsuario, "Delete", "elimino unvoluntario");
-        tareaService.eliminarTareaPorId(id);
-    }
-
-    @DeleteMapping("/delete/{id}")
-    public void Eliminar(@PathVariable Long id) {
+        // auditoriaService.registrarCambio(idUsuario, "Delete", "elimino
+        // unvoluntario");
         tareaService.eliminarTareaPorId(id);
     }
 }

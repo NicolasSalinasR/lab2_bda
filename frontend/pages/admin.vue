@@ -72,12 +72,22 @@ export default {
                     });
                 });
         },
+        // wktToLatLng(wkt) {
+        //     const coords = wkt.match(/\(([^)]+)\)/)[1].split(',').map(point => {
+        //         const [lng, lat] = point.trim().split(' ').map(Number);
+        //         return { lat, lng };
+        //     });
+        //     return coords;
+        // },
         wktToLatLng(wkt) {
-            const coords = wkt.match(/\(([^)]+)\)/)[1].split(',').map(point => {
-                const [lng, lat] = point.trim().split(' ').map(Number);
-                return { lat, lng };
+            const polygons = wkt.match(/\(\([^)]+\)\)/g).map(polygon => {
+                return polygon.match(/([0-9.]+ [0-9.]+)/g).map(coord => {
+                    const [lng, lat] = coord.split(' ').map(Number);
+                    return { lat, lng };
+                });
             });
-            return coords;
+
+            return polygons.flat();
         },
         showPolygonInfo(id, name) {
             alert(`Region: ${name} (ID: ${id})`);
@@ -107,6 +117,11 @@ export default {
 </script>
 
 <style scoped>
+body {
+    margin: 0;
+    padding: 0;
+}
+
 .container-admin {
     position: absolute;
     margin: 0;

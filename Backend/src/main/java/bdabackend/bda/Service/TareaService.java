@@ -5,8 +5,6 @@ import java.text.DecimalFormatSymbols;
 import java.util.List;
 import java.util.Locale;
 
-import bdabackend.bda.Entity.EmergenciaEntity;
-import bdabackend.bda.Entity.VoluntarioEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.geo.Point;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -48,17 +46,15 @@ public class TareaService {
         return tareaRepository.tablaTareas(id);
     }
 
-    public List<TareaEntity> getRankingTarea(String nombreTarea) {
-        return tareaRepository.listRankingTarea(nombreTarea);
-    }
     public List<TareaEntity> listaFiltro(String palabraClave) {
         return tareaRepository.findAll(palabraClave);
     }
+
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
     public void crearTarea(String nombre, String descripcion, String tipo,
-                                Double latitud, Double longitud, Long idEmergencia) {
+            Double latitud, Double longitud, Long idEmergencia) {
 
         // Convierte las coordenadas a un formato adecuado para PostgreSQL, como WKT
         DecimalFormat df = new DecimalFormat("#.######", new DecimalFormatSymbols(Locale.US));
@@ -66,19 +62,19 @@ public class TareaService {
 
         // Ejecuta la consulta SQL parametrizada para insertar el nuevo voluntario
         jdbcTemplate.update("INSERT INTO tarea (nombre, descripcion, "
-                        + "tipo, zona, id_emergencia) VALUES (?, ?, ?, ST_GeomFromText(?), ?)", nombre,
+                + "tipo, zona, id_emergencia) VALUES (?, ?, ?, ST_GeomFromText(?), ?)", nombre,
                 descripcion, tipo, zonaViviendaWKT, idEmergencia);
     }
 
-    public List<?> tareaEmerg (Long id){
+    public List<?> tareaEmerg(Long id) {
         return tareaRepository.tareasPorEmergencia(id);
     }
 
-    public String nombre(Long id){
+    public String nombre(Long id) {
         return tareaRepository.nombre(id);
     }
 
-    public List<?> tareasPorRegion(String nombreRegion){
+    public List<?> tareasPorRegion(String nombreRegion) {
         return tareaRepository.obtenerTareasPorRegion(nombreRegion);
     }
 }

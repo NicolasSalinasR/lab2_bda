@@ -1,6 +1,5 @@
 package bdabackend.bda.Controller;
 
-import bdabackend.bda.Entity.InstitucionEntity;
 import bdabackend.bda.Service.AuditoriaService;
 import bdabackend.bda.Service.InstitucionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,15 +31,16 @@ public class InstutucionController {
     @PostMapping("/add")
     public void addInstitucion(@RequestBody Map<String, String> body) {
         String nombreInstitucion = body.get("nombreInstitucion");
-        //InstitucionEntity institucion = new InstitucionEntity(nombreInstitucion);
-        //Long idUsuario = 1L;
-        //metodo para obtener id de usuario ya listo, esperar a
+        // InstitucionEntity institucion = new InstitucionEntity(nombreInstitucion);
+        // Long idUsuario = 1L;
+        // metodo para obtener id de usuario ya listo, esperar a
         // pablo
-        //auditoriaService.registrarCambio(idUsuario, "Add", "añadio una institucion");
+        // auditoriaService.registrarCambio(idUsuario, "Add", "añadio una institucion");
         institucionService.insertarInstitucion(nombreInstitucion);
     }
 
     @DeleteMapping("/delete/{id}")
     public void Eliminar(@PathVariable Long id) {
         institucionService.eliminarInstitucionPorId(id);
+    }
 }
