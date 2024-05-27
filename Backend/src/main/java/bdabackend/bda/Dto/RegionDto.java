@@ -1,5 +1,7 @@
-package bdabackend.bda.Dto;
+package bdabackend.bda.DTO;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class RegionDto {
     private Long id;
     private String nombre;

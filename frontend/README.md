@@ -79,3 +79,5 @@ npm install @nuxt/bridge
 npm install @nuxtjs/axios
 
 npm install @nuxt/types
+
+npm install vue2-google-maps

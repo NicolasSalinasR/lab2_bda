@@ -6,7 +6,9 @@ import bdabackend.bda.Service.TareaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import bdabackend.bda.Service.RankingService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +20,9 @@ public class TareaController {
     private TareaService tareaService;
     @Autowired
     private AuditoriaService auditoriaService;
+
+    @Autowired
+    private RankingService rankingService;
 
     @GetMapping("/{id}")
     public List<?> getTareaById(@PathVariable Long id) {
@@ -58,7 +63,31 @@ public class TareaController {
 
     @GetMapping("/tareaRegion/{nombreRegion}")
     public List<?> tareaPorRegion(@PathVariable String nombreRegion) {
-        return tareaService.tareasPorRegion(nombreRegion);
+        List<List<?>> lista = new ArrayList<>();
+        List<?> tarea = tareaService.tareasPorRegion(nombreRegion);
+        for (Object tarea1 : tarea) {
+            Object[] tarea2 = (Object[]) tarea1;
+            Long idtarea = (Long) tarea2[0];
+            String descripcion = (String) tarea2[1];
+            String nombre = (String) tarea2[2];
+            String tipo = (String) tarea2[3];
+            String text = rankingService.bytesToString((byte[]) tarea2[4]);
+            assert text != null;
+            double[] latLong = rankingService.wkbToLatLong(rankingService.hexStringToByteArray(text));
+            double latitud = latLong[1];
+            double longitud = latLong[0];
+            Long idEmergencia = (Long) tarea2[5];
+            List<Object> listaNueva = new ArrayList<>();
+            listaNueva.add(idtarea);
+            listaNueva.add(descripcion);
+            listaNueva.add(nombre);
+            listaNueva.add(tipo);
+            listaNueva.add(latitud);
+            listaNueva.add(longitud);
+            listaNueva.add(idEmergencia);
+            lista.add(listaNueva);
+        }
+        return lista;
     }
 
     @GetMapping("/nombre/{nombreTarea}")

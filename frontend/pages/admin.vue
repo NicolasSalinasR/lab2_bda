@@ -21,6 +21,17 @@
             <section class="section2">
                 <button>Crear Emergencia</button>
                 <!-- TODO: en la segunda fila debe ir la leyenda del mapa con los puntos y su significado, debe cambiar a la lista de las emergencias cuando se seleccione en el mapa -->
+                <!-- lista de las tareas -->
+                <div class="containerListTareasRegiones">
+                    <ul>
+                        <li v-for="tarea in tareas" :key="tarea.id">
+                            <span class="icon-container">
+                                <img src="../images/marcador.svg" alt="Marcador" />
+                            </span>
+                            {{ tarea[3] }}
+                        </li>
+                    </ul>
+                </div>
             </section>
         </main>
     </div>
@@ -32,6 +43,13 @@
 import axios from 'axios';
 
 export default {
+    data() {
+        return {
+            map: null,
+            tareas: [],
+            markers: [],
+        };
+    },
     mounted() {
         this.initMap();
     },
@@ -40,57 +58,77 @@ export default {
             const script = document.createElement('script');
             script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDd1yMKvX4PyaxaVtyauISsGrMvxYi6CgQ&libraries=places`;
             script.async = true;
-            script.onload = () => this.loadMap();
-            document.head.appendChild(script);
-        },
-        loadMap() {
-            const map = new google.maps.Map(document.getElementById('map'), {
-                center: { lat: -33.447308, lng: -70.664213 },
-                zoom: 10,
-            });
-
-            this.fetchPolygons(map);
-        },
-        fetchPolygons(map) {
-            axios.get('/api/regions')
-                .then(response => {
-                    response.data.forEach(region => {
-                        const polygon = new google.maps.Polygon({
-                            paths: this.wktToLatLng(region.wkt),
-                            strokeColor: '#FF0000',
-                            strokeOpacity: 0.8,
-                            strokeWeight: 2,
-                            fillColor: '#FF0000',
-                            fillOpacity: 0.35,
-                        });
-
-                        polygon.setMap(map);
-
-                        google.maps.event.addListener(polygon, 'click', () => {
-                            this.showPolygonInfo(region.id, region.name);
-                        });
-                    });
+            script.onload = () => {
+                const map = new google.maps.Map(document.getElementById('map'), {
+                    center: { lat: -33.447308, lng: -70.664213 },
+                    zoom: 10,
                 });
+
+                this.map = map;
+
+                axios.get('http://localhost:8080/regiones/all',
+                    { headers: { 'Authorization': `Bearer eyJhbGciOiJIUzI1NiJ9.eyJudW1lcm9Eb2N1bWVudG9Wb2x1bnRhcmlvIjoiMjA4NDczODgtNSIsIm5vbWJyZVZvbHVudGFyaW8iOiJuaWNvIiwic3ViIjoibmljb0BnbWFpbC5jb20iLCJpYXQiOjE3MTY3ODA0NzksImV4cCI6MTcxNzIxMjQ3OX0.CqoShgFJ_YqMVa0C_R2SS-LoIqsnRwX6jaxM1BkzNjM` } })
+                    .then(response => {
+                        response.data.forEach(region => {
+                            const polygons = this.wktToLatLng(region.geometria);
+                            polygons.forEach(polygon => {
+                                var poligono = new google.maps.Polygon({
+                                    paths: polygon,
+                                    strokeColor: '#FF0000',
+                                    strokeOpacity: 0.8,
+                                    strokeWeight: 2,
+                                    fillColor: '#FF0000',
+                                    fillOpacity: 0.35
+                                });
+                                poligono.setMap(this.map);
+                                poligono.addListener('click', () => {
+                                    this.showPolygonInfo(region.id, region.nombre);
+                                });
+                            });
+                        });
+                    })
+            };
+            document.head.appendChild(script);
+
+
         },
-        // wktToLatLng(wkt) {
-        //     const coords = wkt.match(/\(([^)]+)\)/)[1].split(',').map(point => {
-        //         const [lng, lat] = point.trim().split(' ').map(Number);
-        //         return { lat, lng };
-        //     });
-        //     return coords;
-        // },
         wktToLatLng(wkt) {
-            const polygons = wkt.match(/\(\([^)]+\)\)/g).map(polygon => {
-                return polygon.match(/([0-9.]+ [0-9.]+)/g).map(coord => {
-                    const [lng, lat] = coord.split(' ').map(Number);
+            if (!wkt || typeof wkt !== 'string') {
+                console.error('Invalid WKT:', wkt);
+                return [];
+            }
+
+            const multipolygonMatch = wkt.match(/MULTIPOLYGON\s*\(\(\((.+)\)\)\)/);
+            // console.log(multipolygonMatch[1]);
+            if (!multipolygonMatch) {
+                console.error('WKT is not a valid MULTIPOLYGON:', wkt);
+                return [];
+            }
+
+            const coordinatesString = multipolygonMatch[1];
+            const polygons = coordinatesString.split('),(');
+            // console.log("polygons", polygons);
+            const paths = polygons.map(polygon => {
+                return polygon.split(',').map(coord => {
+                    const [lng, lat] = coord.trim().split(' ').map(Number);
+                    // console.log("lat", lat, "lng", lng);
                     return { lat, lng };
                 });
             });
-
-            return polygons.flat();
+            return paths;
         },
         showPolygonInfo(id, name) {
-            alert(`Region: ${name} (ID: ${id})`);
+            axios.get(`http://localhost:8080/tarea/tareaRegion/${name}`,
+                { headers: { 'Authorization': `Bearer eyJhbGciOiJIUzI1NiJ9.eyJudW1lcm9Eb2N1bWVudG9Wb2x1bnRhcmlvIjoiMjA4NDczODgtNSIsIm5vbWJyZVZvbHVudGFyaW8iOiJuaWNvIiwic3ViIjoibmljb0BnbWFpbC5jb20iLCJpYXQiOjE3MTY3ODA0NzksImV4cCI6MTcxNzIxMjQ3OX0.CqoShgFJ_YqMVa0C_R2SS-LoIqsnRwX6jaxM1BkzNjM` } })
+                .then(response => {
+                    this.clearMarkers();
+                    this.tareas = response.data;
+                    response.data.forEach(tarea => {
+                        this.addMarker(tarea[4], tarea[5], tarea[3]);
+                    });
+                }).catch(error => {
+                    console.error(error);
+                })
         },
         toggleMenu() {
             const aside = document.querySelector('aside');
@@ -110,6 +148,21 @@ export default {
             section.style.transition = '0s';
             section.style.backgroundColor = 'rgba(0, 0, 0, 0)';
             section.style.left = '-100%';
+        },
+        addMarker(lat, lng, title) {
+            const marker = new google.maps.Marker({
+                position: { lat, lng },
+                map: this.map,
+                title: title,
+            });
+            this.markers.push(marker);
+        },
+        clearMarkers() {
+            this.markers.forEach(marker => {
+                google.maps.event.clearInstanceListeners(marker);
+                marker.setMap(null);
+            });
+            this.markers = [];
         },
     },
 };
@@ -239,5 +292,45 @@ aside img {
     margin: 20px;
     filter: invert(1);
     cursor: pointer;
+}
+
+.containerListTareasRegiones {
+    width: 100%;
+    height: 300px;
+    border: 1px solid black;
+    border-radius: 10px;
+    overflow: auto;
+    font-family: 'Roboto', sans-serif;
+}
+
+.containerListTareasRegiones ul {
+    padding: 0;
+}
+
+.containerListTareasRegiones li {
+    padding: 5px;
+    padding-left: 10px;
+    color: black;
+    cursor: pointer;
+}
+
+.containerListTareasRegiones span img {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    position: relative;
+}
+
+.icon-container {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    position: relative;
+    top: 5px;
+}
+
+.containerListTareasRegiones li:hover {
+    background-color: #f2f2f2;
 }
 </style>
