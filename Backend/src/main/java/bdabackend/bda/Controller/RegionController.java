@@ -1,29 +1,51 @@
 package bdabackend.bda.Controller;
 
-import bdabackend.bda.DTO.RegionDTO;
-import bdabackend.bda.Repository.RegionRepository;
+import bdabackend.bda.Dto.RegionDto;
+import bdabackend.bda.Service.RankingService;
+import bdabackend.bda.Service.RegionService;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.MultiPolygon;
 import org.locationtech.jts.io.WKTWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/regiones")
+@RequestMapping("/regiones")
 public class RegionController {
-
     @Autowired
-    private RegionRepository regionRepository;
+    private RankingService rankingService;
+    @Autowired
+    private RegionService regionService;
 
-    @GetMapping
-    public List<RegionDTO> getRegiones() {
+
+    @GetMapping("/all")
+    public List<RegionDto> getRegiones() {
         WKTWriter wktWriter = new WKTWriter();
-        return regionRepository.findAllRegions().stream()
-                .map(region -> new RegionDTO(region.getId(), region.getNombre(),
-                        wktWriter.write(region.getGeometria())))
-                .collect(Collectors.toList());
+        List<RegionDto> regionDtos = new ArrayList<>();
+
+        List<?> listaregiones = regionService.tablaRegiones();
+        for (Object regionObj : listaregiones) {
+            Object[] region = (Object[]) regionObj;
+
+
+            Long id = ((Number) region[0]).longValue();
+            String nombreRegiones = (String) region[1];
+
+            String text = rankingService.bytesToString((byte[]) region[2]);
+
+
+            MultiPolygon geometry = regionService.convertStringToMultiPolygon(text);
+            String geometryWKT = wktWriter.write(geometry);
+
+            RegionDto regionDto = new RegionDto(id, nombreRegiones, geometryWKT);
+            regionDtos.add(regionDto);
+        }
+        return regionDtos;
     }
 }
