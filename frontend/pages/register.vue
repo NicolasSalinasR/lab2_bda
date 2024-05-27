@@ -9,9 +9,9 @@
             <h1>Registro</h1>
             <form @submit.prevent="login" class="formLogin">
                 <input type="text" v-model="nombre" placeholder="Nombre">
-                <input type="text" v-model="zonaVivienda" placeholder="Zona de Vivienda">
                 <input type="text" v-model="numDocumento" placeholder="Número de documento">
                 <input type="text" v-model="email" placeholder="Email">
+                <input type="text" v-model="address" ref="autocompleteInput" placeholder="Zona de vivienda" />
                 <input type="password" v-model="password" placeholder="Contraseña">
                 <input type="password" v-model="password" placeholder="Repita contraseña">
                 <button @click="registrarUsuario">Registrarse</button>
@@ -24,6 +24,7 @@
 
 <script>
 import axios from 'axios';
+import { Loader } from '@googlemaps/js-api-loader';
 
 export default {
     data() {
@@ -33,7 +34,10 @@ export default {
             numDocumento: '',
             email: '',
             password: '',
-            equipamientoVoluntario: ''
+            equipamientoVoluntario: '',
+            address: '',
+            latitude: '',
+            longitude: ''
         };
     },
     // metodo para que cada 5 segundos el circle cambie de posicion sin salirse de la pantalla
@@ -47,6 +51,25 @@ export default {
             // crear el circle
             this.createCircles(x, y, color);
         }, 500);
+        const loader = new Loader({
+            apiKey: 'AIzaSyAX0wJhvShmIIHLgczl44u5Mm_zl9IfboY', // Reemplaza con tu clave
+            version: 'weekly',
+            libraries: ['places'],
+        });
+
+        loader.load().then(() => {
+            const input = this.$refs.autocompleteInput;
+            const autocomplete = new google.maps.places.Autocomplete(input);
+
+            autocomplete.addListener('place_changed', () => {
+                const place = autocomplete.getPlace();
+                if (place.geometry) {
+                    this.address = place.formatted_address;
+                    this.latitude = place.geometry.location.lat();
+                    this.longitude = place.geometry.location.lng();
+                }
+            });
+        });
     },
     methods: {
         createCircles(x, y, color) {
@@ -65,11 +88,12 @@ export default {
             event.preventDefault();
             axios.post('http://localhost:8080/voluntario/add', {
                 nombreVoluntario: this.nombre,
-                zonaViviendaVoluntario: this.zonaVivienda,
-                numeroDocumentoVoluntario: this.numDocumento,
-                correoVoluntario: this.email,
                 contrasenaVoluntario: this.password,
-                equipamientoVoluntario: this.equipamientoVoluntario
+                correoVoluntario: this.email,
+                numeroDocumentoVoluntario: this.numDocumento,
+                equipamientoVoluntario: this.equipamientoVoluntario,
+                latitud: this.latitude,
+                longitud: this.longitude,
             }).then(response => {
                 console.log(response);
                 this.$router.push('/login');

@@ -13,16 +13,7 @@ import bdabackend.bda.Service.VoluntarioService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import bdabackend.bda.Entity.AuthenticationResponse;
-import bdabackend.bda.Entity.AuthenticationResponse;
-import bdabackend.bda.Entity.VoluntarioEntity;
-import bdabackend.bda.Entity.LoginRequest;
-import bdabackend.bda.Service.AuditoriaService;
-import bdabackend.bda.Service.AuthService;
-import bdabackend.bda.Service.VoluntarioService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.geo.Point;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +36,6 @@ public class VoluntarioController {
         return voluntarioService.listaVoluntario();
     }
 
-
     @GetMapping("/palabra/{palabraClave}")
     public ResponseEntity<List<VoluntarioEntity>> buscarVoluntarios(@PathVariable String palabraClave) {
         List<VoluntarioEntity> voluntariosEncontrados = voluntarioService.listaFiltro(palabraClave);
@@ -54,6 +44,7 @@ public class VoluntarioController {
         }
         return ResponseEntity.ok(voluntariosEncontrados);
     }
+
     @GetMapping("/{idVoluntario}")
     public List<?> buscarId(@PathVariable Long idVoluntario) {
         return voluntarioService.listaVoluntarioId(idVoluntario);
@@ -63,6 +54,7 @@ public class VoluntarioController {
     public void eliminar(@PathVariable Long idVoluntario) {
         voluntarioService.eliminarVoluntarioPorId(idVoluntario);
     }
+
     @PostMapping("/add")
     public void crearVoluntario(@RequestBody Map<String, String> body) {
         String nombreVoluntario = body.get("nombreVoluntario");
@@ -76,7 +68,6 @@ public class VoluntarioController {
         voluntarioService.crearVoluntario(nombreVoluntario, correoVoluntario, numeroDocumentoVoluntario,
                 latitud, longitud, passwordEncoder.encode(contrasenaVoluntario), equipamientoVoluntario);
     }
-
 
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> login(@RequestBody Map<String, String> body) {

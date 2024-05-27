@@ -28,13 +28,13 @@ public interface VoluntarioRepository extends JpaRepository<VoluntarioEntity, Lo
         public VoluntarioEntity buscarVoluntarioPorId(Long id);
 
         @Query("SELECT palabra FROM VoluntarioEntity palabra WHERE"
-                + " CONCAT(palabra.nombre, palabra.correo, " +
-                "palabra.numeroDocumento, palabra.equipamiento)"
-                + " LIKE %?1%")
+                        + " CONCAT(palabra.nombre, palabra.correo, " +
+                        "palabra.numeroDocumento, palabra.equipamiento)"
+                        + " LIKE %?1%")
         public List<VoluntarioEntity> findAll(@Param("palabra") String palabraClave);
 
-        @Query("SELECT v FROM VoluntarioEntity v WHERE v.correo = ?1")
-        public VoluntarioEntity buscarPorCorreo(String correo);
+        @Query(value = "SELECT nombre, correo, equipamiento, numero_documento, contrasena FROM voluntario v WHERE v.correo = :correo", nativeQuery = true)
+        public List<String> buscarPorCorreo(@Param("correo") String correo);
 
         @Query(value = "SELECT * FROM voluntario", nativeQuery = true)
         public List<?> listaVoluntario();
@@ -46,13 +46,13 @@ public interface VoluntarioRepository extends JpaRepository<VoluntarioEntity, Lo
         public void eliminarVoluntarioPorId(@Param("id") Long id);
 
         @Query("SELECT v.nombre FROM VoluntarioEntity v WHERE v.id = :id")
-        public String nombre (@Param("id") Long id);
+        public String nombre(@Param("id") Long id);
 
         @Query("SELECT v.numeroDocumento FROM VoluntarioEntity v WHERE v.id = :id")
-        public String numeroDocumento (@Param("id") Long id);
+        public String numeroDocumento(@Param("id") Long id);
 
         @Query("SELECT v.equipamiento FROM VoluntarioEntity v WHERE v.id = :id")
-        public String equipamiento (@Param("id") Long id);
+        public String equipamiento(@Param("id") Long id);
 
         @Query(value = "SELECT * FROM voluntario WHERE voluntario.id = ?1", nativeQuery = true)
         public List<?> listaVoluntarioId(@Param("v") Long id);

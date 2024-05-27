@@ -61,8 +61,8 @@ export default {
         logearUser(event) {
             event.preventDefault();
             axios.post('http://localhost:8080/voluntario/login', {
-                correoVoluntario: this.email,
-                contrasenaVoluntario: this.password
+                correo: this.email,
+                contrasena: this.password
             })
                 .then((response) => {
                     console.log(response);
@@ -70,7 +70,7 @@ export default {
                         localStorage.setItem('token', response.data.token);
                         localStorage.setItem('id', response.data.id);
                         localStorage.setItem('nombre', response.data.nombre);
-                        this.$router.push('/voluntario');
+                        this.$router.push('/admin');
                     }
                 })
                 .catch((error) => {

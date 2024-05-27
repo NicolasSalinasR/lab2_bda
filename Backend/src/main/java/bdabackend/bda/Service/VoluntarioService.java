@@ -35,7 +35,19 @@ public class VoluntarioService {
     }
 
     public VoluntarioEntity buscarPorCorreo(String correo) {
-        return voluntarioRepository.buscarPorCorreo(correo);
+
+        VoluntarioEntity voluntario = new VoluntarioEntity();
+        List<String> voluntarioData = voluntarioRepository.buscarPorCorreo(correo);
+        // Se hace split "," para obtener los datos de la lista al primer elemento
+        String[] parts = voluntarioData.get(0).split(",");
+        if (parts.length > 0) {
+            voluntario.setNombre(parts[0]);
+            voluntario.setCorreo(parts[1]);
+            voluntario.setEquipamiento(parts[2]);
+            voluntario.setNumeroDocumento(parts[3]);
+            voluntario.setContrasena(parts[4]);
+        }
+        return voluntario;
     }
 
     public List<?> listaVoluntario() {

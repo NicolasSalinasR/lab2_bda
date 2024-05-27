@@ -67,7 +67,7 @@ export default {
                 this.map = map;
 
                 axios.get('http://localhost:8080/regiones/all',
-                    { headers: { 'Authorization': `Bearer eyJhbGciOiJIUzI1NiJ9.eyJudW1lcm9Eb2N1bWVudG9Wb2x1bnRhcmlvIjoiMjA4NDczODgtNSIsIm5vbWJyZVZvbHVudGFyaW8iOiJuaWNvIiwic3ViIjoibmljb0BnbWFpbC5jb20iLCJpYXQiOjE3MTY3ODA0NzksImV4cCI6MTcxNzIxMjQ3OX0.CqoShgFJ_YqMVa0C_R2SS-LoIqsnRwX6jaxM1BkzNjM` } })
+                    { headers: { 'Authorization': `Bearer eyJhbGciOiJIUzI1NiJ9.eyJudW1lcm9Eb2N1bWVudG9Wb2x1bnRhcmlvIjoiMjA4NDczODctNSIsIm5vbWJyZVZvbHVudGFyaW8iOiJQYWJsbyIsInN1YiI6InBhYmxvQGdtYWlsLmNvbSIsImlhdCI6MTcxNjgzMjY1MCwiZXhwIjoxNzE3MjY0NjUwfQ.eDYFXSKcqxxFFD481vS3yGB0rWl3aqbLXOsiWM4wWHY` } })
                     .then(response => {
                         response.data.forEach(region => {
                             const polygons = this.wktToLatLng(region.geometria);
@@ -119,7 +119,7 @@ export default {
         },
         showPolygonInfo(id, name) {
             axios.get(`http://localhost:8080/tarea/tareaRegion/${name}`,
-                { headers: { 'Authorization': `Bearer eyJhbGciOiJIUzI1NiJ9.eyJudW1lcm9Eb2N1bWVudG9Wb2x1bnRhcmlvIjoiMjA4NDczODgtNSIsIm5vbWJyZVZvbHVudGFyaW8iOiJuaWNvIiwic3ViIjoibmljb0BnbWFpbC5jb20iLCJpYXQiOjE3MTY3ODA0NzksImV4cCI6MTcxNzIxMjQ3OX0.CqoShgFJ_YqMVa0C_R2SS-LoIqsnRwX6jaxM1BkzNjM` } })
+                { headers: { 'Authorization': `Bearer eyJhbGciOiJIUzI1NiJ9.eyJudW1lcm9Eb2N1bWVudG9Wb2x1bnRhcmlvIjoiMjA4NDczODctNSIsIm5vbWJyZVZvbHVudGFyaW8iOiJQYWJsbyIsInN1YiI6InBhYmxvQGdtYWlsLmNvbSIsImlhdCI6MTcxNjgzMjY1MCwiZXhwIjoxNzE3MjY0NjUwfQ.eDYFXSKcqxxFFD481vS3yGB0rWl3aqbLXOsiWM4wWHY` } })
                 .then(response => {
                     this.clearMarkers();
                     this.tareas = response.data;
